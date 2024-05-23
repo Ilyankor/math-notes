@@ -1,0 +1,1843 @@
+\documentclass[letterpaper, 10pt]{article}
+
+% math packages
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% text packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\renewcommand{\familydefault}{\sfdefault}
+
+% style commands
+\usepackage[margin=1.25in]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor=blue,
+}
+\usepackage{tocloft}
+\setlength\cftbeforesubsecskip{10pt}
+\usepackage{titlesec}
+\titleformat*{\subsubsection}{\large\sffamily}
+
+
+% theorem style
+\newenvironment{myquote}%
+    {\list{}{\leftmargin=0.3in \rightmargin=0pt}\item[]}%
+    {\endlist}
+
+\newtheoremstyle{theostyle}%
+    {}%
+    {}%
+    {\upshape}%
+    {}%
+    {\bfseries}%
+    {}%
+    {\newline}%
+    {}%
+
+\theoremstyle{theostyle}
+\newtheorem{theorem}{Theorem}[section]
+\newenvironment{thmstyle}[1][]{% 
+    \begin{theorem}[#1]\leavevmode\vspace{-\baselineskip}\myquote%
+    }{\endmyquote\end{theorem}}
+
+% title information
+\title{Modern Algebra 2}
+\author{University of Houston, Spring 2024}
+\date{MATH 6303 (Dr. Kalantar)}
+
+\begin{document}
+
+\maketitle
+\rule{0.9\textwidth}{0.5pt}
+
+\tableofcontents
+\newpage
+
+\section{Background}
+
+\subsection{Definitions}
+
+\subsubsection{Vector spaces}
+
+\paragraph{norm}
+\begin{quote}
+    Let \(V\) be a vector space over \(\mathbb{R}\).
+    A \textbf{norm} on \(V\) is a function \(\lVert \cdot \rVert : V \rightarrow [0, \infty)\) such that:
+    \begin{enumerate}
+        \item \(\lVert x \rVert = 0\) if and only if \(x = 0\) for all \(x \in V\)
+        \item \(\lVert \alpha x \rVert = \lvert \alpha \rvert \lVert x \rVert\) for all \(x \in V, \alpha \in \mathbb{R}\)
+        \item \(\lVert x + y \rVert \leq \lVert x \rVert + \lVert y \rVert\) for all \(x, y \in V\)
+    \end{enumerate}
+\end{quote}
+
+\paragraph{normed vector space}
+\begin{quote}
+    A \textbf{normed vector space} is a vector space equipped with a norm.
+\end{quote}
+
+\paragraph{norm metric}
+\begin{quote}
+    Given a normed space \(\left(V, \lVert \cdot \rVert\right)\), define the \textbf{norm metric} \(d:V\times V \rightarrow \mathbb{R}\) by \(d(x,y) \coloneqq \lVert x - y \rVert\).
+\end{quote}
+
+\paragraph{complete metric space}
+\begin{quote}
+    A \textbf{complete metric space} is a metric space in which every Cauchy sequence converges.
+\end{quote}
+
+\paragraph{algebra}
+\begin{quote}
+\end{quote}
+
+\paragraph{normed algebra}
+\begin{quote}
+    A \textbf{normed algebra} \(\mathcal{A}\) is an algebra over a field which has a sub-multiplicative norm,
+    that is, for all \(x, y \in \mathcal{A}\), \(\lVert xy \rVert \leq \lVert x \rVert \lVert y \rVert\).
+\end{quote}
+
+\paragraph{non-degenerate bilinear form}
+\begin{quote}
+    A bilinear map \(T:V \times V \rightarrow V\) on a vector space \(V\) is \textbf{non-degenerate} 
+    if and only if for all \(x \in V\), if \(T(x,y) = 0\) for all \(y \in V\), then \(x = 0\).
+\end{quote}
+
+
+\subsubsection{Matrices}
+
+\paragraph{operator norm}
+\begin{quote}
+    The \textbf{operator norm} on \(\mathrm{M}_n (\mathbb{R})\) is defined by
+    \[\lVert A \rVert \coloneqq \sup \bigl\{\lVert A v \rVert_2 : v \in \mathbb{R}^n \ \text{and} \ \lVert v \rVert_2 \leq 1 \bigr\}\]
+
+    The operator norm satisfies \(\lVert AB \rVert \leq \lVert A \rVert \lVert B \rVert\) for all \(A, B \in \mathrm{M}_n\).
+
+    \begin{proof}
+        The operator norm is a norm.
+        \begin{enumerate}
+            \item \(\lVert A \rVert = 0\) means that \(\lVert Av\rVert_2 = 0\) for all \(\lVert v\rVert_2 \leq 1\), so \(A = 0\). 
+            \item By properties of the \(\lVert \cdot \rVert_2 \) norm and the supremum,
+            \[\lVert \alpha A \rVert  = \sup \bigl\{\lVert (\alpha A) v \rVert_2 \bigr\} = \sup \bigl\{\lvert \alpha \rvert \lVert A v \rVert_2 \bigr\}
+             = \lvert \alpha \rvert \sup \bigl\{\lVert A v \rVert_2 \bigr\} = \lvert \alpha \rvert \lVert A \rVert\]
+            \item Again, by properties of the \(\lVert \cdot \rVert_2 \) norm and the supremum,
+            \[\lVert A +  B \rVert = \sup \bigl\{\lVert A v + B v \rVert_2 \bigr\} \leq 
+            \sup \bigl\{\lVert A v \rVert_2 + \lVert B v \rVert_2 \bigr\} \leq \lVert A \rVert + \lVert B \rVert\]
+        \end{enumerate}
+        The operator norm is submultiplicative.
+
+        First, by the definition of the operator norm, \(\lVert A \rVert \geq \lVert A u \rVert_2\) where \(u \neq 0\) is a unit vector.
+        Since \(u\) is a unit vector, write \(u = \frac{v}{\lVert v \rVert_2}\).
+        Finally, \(\lVert A \rVert \geq \left\lVert A \frac{v}{\lVert v \rVert_2} \right\rVert_2 = \frac{1}{\lVert v \rVert_2} \lVert A v \rVert_2\) and so
+        \(\lVert A v \rVert_2 \leq \lVert A \rVert \lVert v \rVert_2\).
+        Then, 
+        \[\lVert AB \rVert = \sup \bigl\{ \lVert A(Bv) \rVert_2 \bigr\} \leq \sup \bigl\{\lVert A \rVert \lVert Bv \rVert_2 \bigr\}
+        \leq \sup \bigl\{\lVert A \rVert \lVert B \rVert \lVert v \rVert_2 \bigr\} \leq \lVert A \rVert \lVert B \rVert \]
+    \end{proof}
+\end{quote}
+
+\paragraph{general linear group}
+\begin{quote}
+    Let \(n \in \mathbb{N}\).
+    The \textbf{general linear group} over \(\mathbb{R}\) is the set of all \(n \times n\) invertible real matrices.
+    \[\mathrm{GL}_n (\mathbb{R}) \coloneqq \{A \in \mathrm{M}_n (\mathbb{R}) \mid A \ \text{is invertible}\}\]
+\end{quote}
+
+\paragraph{special linear group}
+\begin{quote}
+    Let \(n \in \mathbb{N}\).
+    The \textbf{special linear group} over \(\mathbb{R}\) is the set of all \(n \times n\) invertible real matrices with determinant \(1\).
+    \[\mathrm{SL}_n (\mathbb{R}) = \{A \in \mathrm{M}_n (\mathbb{R}) \mid \det{(A)} = 1\}\]
+\end{quote}
+
+\paragraph{unitary group}
+\begin{quote}
+    Let \(n \in \mathbb{N}\).
+    The \textbf{unitary group} is the set of all \(n \times n\) invertible complex matrices whose inverse is equal to its conjugate transpose.
+    \[\mathrm{U}(n) \coloneqq \{A \in \mathrm{M}_n (\mathbb{C}) \mid A^*A = I\}\]
+
+    Properties of unitary matrices:
+    \begin{itemize}
+        \item \(\lVert U x \rVert_2 = \lVert x \rVert_2\) for all \(x \in \mathbb{C}^n\).
+        \[\lVert Ux \rVert^2_2 = \langle (Ux), (Ux) \rangle = (Ux)^\ast \cdot Ux = x^\ast U^\ast \cdot U x = x^\ast \cdot x = \lVert x \rVert_2^2\]
+        \item \(\lVert UX \rVert = \lVert X \rVert \) for all \(X \in \mathrm{M}_n(\mathbb{C})\).
+        \[\lVert UX \rVert = \sup\left\{\lVert U X v \rVert_2 : \lVert v \rVert_2 \leq 1 \right\} = \sup\left\{\lVert U (X v) \rVert_2 \right\} = \sup\left\{\lVert X v \rVert_2 \right\} = \lVert X \rVert\]
+    \end{itemize}
+\end{quote}
+
+\paragraph{orthogonal group}
+\begin{quote}
+    Let \(n \in \mathbb{N}\).
+    The \textbf{orthogonal group} is the set of all \(n \times n\) invertible real matrices whose inverse is equal to its transpose.
+    \[\mathrm{O}(n) \coloneqq \{A \in \mathrm{M}_n (\mathbb{R}) \mid A^\top A = I\}\]
+\end{quote}
+
+\paragraph{nilpotent matrix}
+\begin{quote}
+    A matrix \(T \in \mathrm{M}_n(\mathbb{C})\) is \textbf{nilpotent} if there exists \(k \in \mathbb{N}\) such that \(T^k= 0\).
+    Every nilpotent matrix has has trace \(0\).
+\end{quote}
+
+\paragraph{Jordan block}
+\begin{quote}
+    A \textbf{Jordan block} is a square matrix of the form
+    \[\begin{bmatrix}
+        \lambda_1 & 1 & 0 \\
+        & \lambda_2 & \\
+        & & \ddots \\
+        0 & & \lambda_n
+    \end{bmatrix}\]
+\end{quote}
+
+\paragraph{Jordan normal form}
+\begin{quote}
+    A \textbf{Jordan form} is a block diagonal matrix with each block on the diagonal being a \textbf{Jordan block}.
+
+    Facts:
+    \begin{itemize}
+    \item Every complex square matric can be put in Jordan form in some basis, called its \textbf{Jordan normal form}.
+    \item \textbf{Jordan decomposition}: A matrix can be written as \(A = D + N\) where \(D\) is diagonal and \(N\) is upper triangular with \(0\) on the diagonal and \(DN = ND\).
+    \(N\) is nilpotent.
+    \item The Jordan normal form is unique.
+    \item There exists a polynomial such that \(p(A) = D\).
+    \end{itemize}
+\end{quote}
+
+\paragraph{generalized eigenspaces}
+\begin{quote}
+    Let \(V\) be a finite dimensional vector space and \(T: V \rightarrow V\) be a linear map with eigenvalue \(\lambda\).
+    A \textbf{generalized eigenvector} is a \(v \in V\) such that \((T - \lambda I)^n v = 0\) for some \(n \in \mathbb{N}\).
+    The set of all such generalized eigenvectors corresponding to \(\lambda\) forms the \textbf{generalized eigenspace} of \(V\).
+\end{quote}
+
+\paragraph{simultaneous diagonalizability}
+\begin{quote}
+\end{quote}
+
+\subsubsection{Matrix functions}
+
+\paragraph{exponential map}
+\begin{quote}
+    For every \(A \in \mathrm{M}_n (\mathbb{R})\) the sequence of partial sums 
+    \( \displaystyle \left\{\sum_{n=0}^N \frac{A^n}{n!}\right\}_{N = 1}^{\infty}\) converges.
+    The limit of this sequence is denoted \(\mathrm{e}^A\).
+    \[\mathrm{e}^A \coloneqq \lim_{N \to \infty} \left(\sum_{n=0}^N \frac{A^n}{n!}\right)\]
+    The \textbf{exponential map} is \(\exp : \mathrm{M}_n (\mathbb{R}) \rightarrow \mathrm{M}_n (\mathbb{R})\) defined by \(\exp(A) \coloneqq \mathrm{e}^A\).
+    \begin{proof}
+        Since all norms on \(\mathrm{M}_n ( \mathbb{R}) \) are equivalent, use the operator norm.
+        Then,
+        \[\sum_{n=0}^{\infty} \left\lVert \frac{A^n}{n!} \right\rVert = \sum_{n=0}^{\infty} \frac{\lVert A^n \rVert}{n!} \leq \sum_{n=0}^{\infty} \frac{\lVert A \rVert^n}{n!} < \infty\]
+        Thus the sequence of partial sums \(\displaystyle \left\{\sum_{n=0}^N \frac{A^n}{n!}\right\}_{N = 1}^{\infty}\) is Cauchy, and since \(\mathrm{M}_n ( \mathbb{R}) \) is a complete metric space, the sequence converges.
+    \end{proof}
+
+    Properties of the exponential map:
+    \begin{enumerate}
+        \item \(\mathrm{e}^0 = I\)
+        \item if \(A, B \in \mathrm{M}_n (\mathbb{R})\) commute (\(AB = BA\)), then \(\mathrm{e}^{A + B} = \mathrm{e}^A \cdot \mathrm{e}^B\).
+        
+        Since \(A\) and \(B\) commute,
+        \[\mathrm{e}^A \mathrm{e}^B = \left(\sum_{m = 0}^\infty \frac{A^m}{m!}\right) \left(\sum_{n = 0}^\infty \frac{B^n}{n!}\right) = \sum_{m = 0}^\infty \sum_{n = 0}^\infty \frac{A^m B^n}{m! n!}\]
+        Next, since the series converges absolutely, let \(k = m + n\).
+        Then
+        \begin{align*}
+            &=\sum_{k = 0}^\infty \sum_{n = 0}^k \frac{A^{k-n} B^{n}}{(k-n)! n!} = \sum_{k = 0}^\infty \frac{1}{k!} \sum_{n = 0}^k \frac{k!}{(k-n)! n!} A^{k-n} B^{n} \\
+            &= \sum_{k = 0}^\infty \frac{\displaystyle \sum_{n = 0}^k \binom{k}{n} A^{k-n} B^{n}}{k!} = \sum_{k = 0}^\infty \frac{(A + B)^k}{k!} \\
+            &= \mathrm{e}^{A+B}
+        \end{align*}
+        \item \(\mathrm{e}^A\) is invertible for any \(A\).
+        The inverse is \(\mathrm{e}^{-A}\).
+
+        Since \(A\) commutes with \(-A\), \(\mathrm{e}^A \cdot \mathrm{e}^{-A} = \mathrm{e}^{-A} \cdot \mathrm{e}^{A} = \mathrm{e}^0 = I\).
+    \end{enumerate}
+\end{quote}
+
+\paragraph{logarithmic map}
+\begin{quote}
+    Given \(A \in \mathrm{M}_n (\mathbb{C})\), define
+    \[\log{(A)} \coloneqq \sum_{n=1}^{\infty} (-1)^{n+1} \frac{(A - I)^n}{n}\]
+    whenever it is defined.
+
+
+    If \(\lVert A - I \rVert < 1\), then
+    \[\sum_{n=1}^{\infty} \left\lVert (-1)^{n+1} \frac{(A - I)^n}{n} \right\rVert < \sum_{n=1}^{\infty} \frac{\left\lVert A - I \right\rVert^n}{n}  < \infty\]
+    hence, \(\log{(A)}\) is defined.
+    Note that even if \(\lVert A - I \rVert \geq 1\), \(\log(A)\) can still converge.
+    For example, if \(A - I\) is nilpotent (\textbf{unipotent}), then \((A - I)^n\) is eventually \(0\), so the sum is finite.
+\end{quote}
+
+\subsection{Theorems}
+
+\subsubsection{Vector spaces}
+\begin{thmstyle}
+    All norms on a finite-dimensional vector space are equivalent.
+    
+    
+    In other words, if \(\lVert \cdot \rVert\) and \(\lVert \cdot \rVert'\) are two norms on a finite-dimensional vector space \(V\),
+    then there are constants \(c, d > 0\) such that \(\lVert x \rVert \leq c \lVert x \rVert'\) and \(\lVert x \rVert' \leq d \lVert x \rVert\) for all \(x \in V\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    Any two norms on a finite-dimensional vector space give the same topology.
+    
+    \begin{proof}
+        Suppose \(\lVert \cdot \rVert\) and \(\lVert \cdot \rVert'\) are two norms.
+        Let \((x_n)\) be a sequence that converges to \(x\) in the \(\lVert \cdot \rVert\) norm.
+        Then the sequence \(\lVert x_n - x \rVert\) converges to \(0\).
+        Since any two norms on a finite-dimensional vector space are equivalent, the sequence \(\lVert x_n - x \rVert'\) also converges to \(0\).
+        Thus \((x_n)\) converges to \(x\) in the \(\lVert \cdot \rVert'\) norm.
+
+        A similar argument shows that any sequence that converges in the \(\lVert \cdot \rVert'\) norm also converges in the \(\lVert \cdot \rVert\) norm.
+        
+        Since the two norm metrics have the same convergent sequences, they generate the same topology.
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    The topology of \(\mathrm{M}_n (\mathbb{R})\) is defined by any norm on \(\mathrm{M}_n (\mathbb{R})\).
+
+    \begin{proof}
+        Since \(\mathrm{M}_n (\mathbb{R})\) is a finite-dimensional vector space, all norms are equivalent and thus give the same topology.
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(\{x_n\}_{n \in \mathbb{N}}\) be a sequence in a normed vector space.
+    If \(\displaystyle \sum_{n \in \mathbb{N}} \lVert x_n \rVert < \infty\), then the sequence of partial sums \( \displaystyle \left\{\sum_{n=1}^N x_n \right\}_{N=1}^\infty\) is Cauchy.
+
+    \begin{proof}
+        By the triangle inequality, for all \(N_1 < N_2 \in \mathbb{N}\),
+        \[\left\lVert \sum_{n=1}^{N_2} x_n - \sum_{n=1}^{N_1} x_n \right\rVert = \left\lVert \sum_{n=N_1}^{N_2} x_n \right\rVert \leq \sum_{n=N_1}^{N_2} \lVert x_n \rVert \]
+        Since the sum is finite, \(\displaystyle \lim_{n \to \infty} \lVert x_n \rVert = 0\), so the right hand side can be made arbitrarily small.
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    \(\mathrm{GL}_n ( \mathbb{R})\) is open in \(\mathrm{M}_n (\mathbb{R})\).
+    In fact, in any unital complete normed algebra, the set of all invertible elements is open.
+
+    \begin{proof}
+        
+        \textbf{Using the determinant}
+        \[\det (A) = \sum_{\sigma \in S_n} \left( \operatorname{sgn}{(\sigma)} \prod_{i=1}^n a_{i, \sigma(i)} \right)\]
+        The determinant is a polynomial, thus is continuous.
+        Since \(\det : \mathrm{GL}_n (\mathbb{R}) \rightarrow \mathbb{R} \setminus \{0\}\) is a continuous function and \(\mathbb{R} \setminus \{0\}\) is open in \(\mathbb{R}\),
+        \(\mathrm{GL}_n (\mathbb{R})\) is open.
+
+        \textbf{Using open sets}
+
+        Recall the series \(\displaystyle \frac{1}{1-x} = \sum_{n = 0}^\infty x^n\) which converges if \(\lvert x \rvert < 1\).
+        Similarly if \(\lVert A - I \rVert < 1\), then \(\displaystyle A^{-1} = \sum_{n=0}^\infty (A - I)^n\).
+
+        Let \(X \in \mathrm{GL}_n(\mathbb{R})\) and consider the open ball 
+        \[B = \left\{Y \in \mathrm{M}_n(\mathbb{R}) : \lVert X - Y \rVert < \frac{1}{\left\lVert X^{-1}\right\rVert}\right\}\]
+        If \(Y \in B\), then by sub-multiplicativity of the norm, 
+        \[1 > \lVert X - Y \rVert \lVert X^{-1} \rVert \geq \lVert (X-Y)X^{-1}\rVert = \lVert I - YX^{-1}\rVert\]
+        So \(YX^{-1}\) is invertible.
+        Let \(Z\) be its inverse.
+        Then
+        \((YX^{-1})Z = I\) implies that \(Y = Z^{-1} X\).
+        Thus \(Y\) is also invertible, and hence \(B \subset \mathrm{GL}_n(\mathbb{R})\).
+        Since every invertible element has an open neighborhood contained in \(\mathrm{GL}_n(\mathbb{R})\), \(\mathrm{GL}_n(\mathbb{R})\) is open.
+    \end{proof}
+\end{thmstyle}
+
+\subsubsection{Matrices}
+
+\begin{thmstyle}
+    Let \(A \in \mathrm{M}_n (\mathbb{C})\) be a diagonal matrix
+    \[A = 
+        \begin{bmatrix}
+            \alpha_1 & & & 0 \\
+            & \alpha_2 & & \\
+            & & \ddots & \\
+            0 & & & \alpha_n
+        \end{bmatrix}
+    \]
+    Then
+    \[\lVert A \rVert = \max_{1 \leq k \leq n} \lvert \alpha_k \rvert\]
+
+    \begin{proof}
+        \begin{align*}
+            \lVert A \rVert &= \sup \left\{\lVert A x \rVert_2 \right\} = \sup \left\{\left(\sum_{k=1}^n \left(\alpha_k x_k\right)^2\right)^{1/2} \right\} \\
+            &\leq \sup \left\{ \left(\max_{1 \leq k \leq n} \lvert \alpha_k \rvert \right) \left(\sum_{k=1}^n \left( x_k\right)^2\right)^{1/2} \right\} \\
+            &= \max_{1 \leq k \leq n} \lvert \alpha_k \rvert
+        \end{align*}
+        The reverse inequality is given by definition of the operator norm.
+    \end{proof}
+\end{thmstyle}
+
+
+\begin{thmstyle}[Schur decomposition]
+    Every complex square matrix is unitarily equivalent to an upper triangular matrix.
+\end{thmstyle}
+
+\begin{thmstyle}
+    The set of diagonalizable matrics is dense in \(\mathrm{M}_n (\mathbb{C})\).
+
+    \begin{proof}
+        Let \(X \in \mathrm{M}_n(\mathbb{C})\) and \(U\) be a unitary matrix such that \(UXU^{-1}\) is upper triangular.
+        Let
+        \[A = UXU^{-1} = 
+            \begin{bmatrix}
+                \alpha_1 & & & \star \\
+                & \alpha_2 & & \\
+                & & \ddots & \\
+                0 & & & \alpha_n
+            \end{bmatrix}
+        \]
+        Let \(\varepsilon > 0\) be given.
+        For each \(k = 1, 2, \dots, n\), choose \(0 \leq \varepsilon_k < \varepsilon\) such that 
+        \(\alpha_1 + \varepsilon_1, \alpha_2 + \varepsilon_2, \dots, \alpha_n + \varepsilon_n\) are distinct.
+        Let 
+        \[B = 
+            \begin{bmatrix}
+                \varepsilon_1 & & & 0 \\
+                & \varepsilon_2 & & \\
+                & & \ddots & \\
+                0 & & & \varepsilon_n
+            \end{bmatrix}
+        \]
+        and let \(C = A + B\).
+        Then \(\lVert C - A \rVert = \lVert B \rVert < \varepsilon\) and
+        \[C = 
+            \begin{bmatrix}
+                \alpha_1 + \varepsilon_1 & & & \star \\
+                & \alpha_2 + \varepsilon_2 & & \\
+                & & \ddots & \\
+                0 & & & \alpha_n + \varepsilon_n
+            \end{bmatrix}
+        \]
+        which is diagonalizable.
+        So \(U^{-1}CU\) is also diagonalizable and
+        \[\lVert X - U^{-1}CU \rVert = \lVert U^{-1}\left(UXU^{-1} - C\right)U\rVert = \lVert U^{-1} (A-C)U\rVert = \lVert A - C \rVert < \varepsilon\]
+    \end{proof}
+\end{thmstyle}
+
+\subsubsection{Matrix functions}
+
+\begin{thmstyle}
+    SURJECTIVITY OF \(\exp : \mathrm{M}_n (\mathbb{C}) \rightarrow \mathrm{GL}_n (\mathbb{C})\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(n \in \mathbb{N}\).
+    For every \(m \in \mathbb{N}\), the map \(f: \mathrm{M}_n(\mathbb{C}) \rightarrow \mathrm{M}_n(\mathbb{C})\) defined by \(f(X) = X^m\) is continuous.
+
+    \begin{proof}
+        By induction.
+
+
+        Let \(m = 1\) and \(\varepsilon > 0 \) be arbitrary.
+        Choose \(\delta = \varepsilon\).
+        Then \(\lVert X - Y \rVert < \delta\) implies that \(\lVert f(X) - f(Y) \rVert = \lVert X - Y \rVert < \delta = \varepsilon\).
+        So \(f(X) = X\) is continuous.
+
+
+        Assume that for any \(m-1\), \(f(X) = X^{m-1}\) is continuous.
+        Thus there exists \(\delta_0\) such that if \(\lVert X - Y \rVert < \delta_0\), then \(\left\lVert X^{m-1} - Y^{m-1} \right\rVert < \frac{\varepsilon}{\lVert Y \rVert}\).
+        
+        
+        Next, let \(\varepsilon > 0\) be arbitrary.
+        Choose \(\delta = \min \left\{\delta_0 , \frac{\varepsilon - \left\lVert X^{m-1} - Y^{m-1} \right\rVert \lVert Y \rVert}{\left\lVert X^{m-1}\right\rVert} \right\}\).
+        By the triangle inequality and properties of the operator norm, if \(\lVert X - Y \rVert < \delta\), then
+        \begin{align*}
+            \lVert X^m - Y^m \rVert  &= \lVert X^m - X^{m-1} Y + X^{m-1} Y - Y^m \rVert \\
+            &= \lVert X^{m-1} \left(X - Y \right) + \left(X^{m-1} - Y^{m-1}\right) Y \rVert \\
+            &< \left\lVert X^{m-1} \right\rVert \lVert X - Y \rVert + \left\lVert X^{m-1} - Y^{m-1} \right\rVert \lVert Y \rVert \\
+            &< \left\lVert X^{m-1} \right\rVert  \left( \frac{\varepsilon - \left\lVert X^{m-1} - Y^{m-1} \right\rVert \lVert Y \rVert}{\left\lVert X^{m-1}\right\rVert}\right) + \left\lVert X^{m-1} - Y^{m-1} \right\rVert \lVert Y \rVert \\
+            &< \varepsilon
+        \end{align*}
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    THE CONTINUITY OF EXP FUNCTION?
+\end{thmstyle}
+
+\begin{thmstyle}
+    The function \(\log\) is continuous on the open set \(B_1 (I) \coloneqq \{X \in \mathrm{M}_n (\mathbb{C}) : \lVert X - I \rVert < 1\}\).
+
+    \begin{proof}
+        Let \(\varepsilon > 0\) be arbitrary and \(X_0 \in B_1(I)\).
+        Then, \(\lVert X_0 \rVert < 2\).
+        Next, define \(\alpha\) such that \(1 \leq \lVert X_0 \rVert < \alpha < 2\) and let \(N \in \mathbb{N}\) be such that
+        \[\sum_{k=N}^{\infty} (-1)^{k+1} \frac{(\alpha - 1)^k}{k} < \frac{\varepsilon}{2}\]
+        Since the map \(g : B_1(I) \rightarrow \mathrm{M}_n(\mathbb{C})\) defined by 
+        \[g(X) = \sum_{k=1}^{N-1} (-1)^{k+1} \frac{X^k}{k}\]
+        is continuous, there exists \(\delta_0 > 0\) such that if \(Y \in B_1(I)\) with \(\lVert X_0 - Y\rVert < \delta_0\), then \(\lVert g(X_0) - g(Y) \rVert < \frac{\varepsilon}{2}\).
+        Let \(\delta = \min \left\{\delta_0, \alpha - \lVert X_0 \rVert\right\}\).
+        Then, if \(Y \in B_1(I)\) and \(\lVert X_0 - Y \rVert < \delta\),
+        \[\lVert \log{(X_0)} - \log{(Y)} \rVert \leq \left\lVert\sum_{k=1}^{N-1} (-1)^{k+1} \frac{X_0^k - Y^k}{k} \right\rVert + \sum_{k=N}^{\infty} \frac{\lVert X_0\rVert^{k} + \lVert Y \rVert^{k}}{k} < \frac{3\varepsilon}{2}\]
+        Additionally, \(\log : B_1(I) \rightarrow \mathrm{M}_n (\mathbb{C})\) is uniformly continuous.
+        It follows from taking \(\delta = 2\) since \(\delta \leq \alpha - \lVert X_0 \rVert < 2\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(U \in \mathrm{M}_n (\mathbb{C})\) be invertible and let \(A \in \mathrm{M}_n (\mathbb{C})\).
+    Then,
+    \begin{enumerate}
+        \item \(\mathrm{e}^{UAU^{-1}} = U \mathrm{e}^A U^{-1}\).
+        \item if \(\lVert A - I\rVert < 1\) and \(\lVert UAU^{-1} - 1\rVert < 1\), then \(\log(UAU^{-1}) = U \log(A) U^{-1}\).
+    \end{enumerate}
+    This can apply to any function defined by a convergent power series.
+    In general, if \(f: D \subset \mathrm{M}_n (\mathbb{C}) \rightarrow \mathrm{M}_n(\mathbb{C})\) such that 
+    \(f(X) \coloneqq \displaystyle \sum_{n=0}^{\infty} \alpha^{n}X^n\), then \(f(UXU^{-1}) = Uf(X)U^{-1}\).
+    \begin{proof}
+    \[\mathrm{e}^{UAU^{-1}} = \sum_{k = 0}^\infty \frac{\left(UAU^{-1}\right)^k}{k!} = \sum_{k = 0}^\infty \frac{UAU^{-1} \cdot UAU^{-1} \cdots}{k!}
+            = \sum_{k = 0}^\infty \frac{UA^k U^{-1}}{k!} = U \mathrm{e}^A U^{-1}\]
+     If \(\lVert A - I\rVert < 1\) and \(\lVert UAU^{-1} - 1\rVert < 1\), then 
+     \begin{align*}
+        \log{(UAU^{-1})} &= \sum_{k = 1}^\infty (-1)^{k+1} \frac{\left(UAU^{-1} - I\right)^k}{k} = \sum_{k = 1}^\infty (-1)^{k+1} \frac{U(A - I)U^{-1} \cdot U(A-I)U^{-1} \cdots}{k} \\
+        &= \sum_{k = 1}^\infty  (-1)^{k+1} \frac{U(A - I)^k U^{-1}}{k} = U \log{(A)} U^{-1}
+     \end{align*}
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    The exponential and logarithmic maps are inverses of each other.
+    Let \(A \in \mathrm{M}_n (\mathbb{C})\).
+    Then,
+    \begin{enumerate}
+        \item If \(\lVert A - I \rVert < 1\), then \(\mathrm{e}^{\log{(A)}} = A\)
+        \item If \(\lVert A \rVert < \log{(2)}\), then \(\log{\left(\mathrm{e}^A\right)}\) is defined and is equal to \(A\).
+    \end{enumerate}
+
+    \begin{proof}
+        First, note that if \(A \in \mathrm{M}_n (\mathbb{C})\) is a diagonal matrix
+        \[A = 
+            \begin{bmatrix}
+                \alpha_1 & & & 0 \\
+                & \alpha_2 & & \\
+                & & \ddots & \\
+                0 & & & \alpha_n
+            \end{bmatrix}
+        \]
+        then by the Taylor series definition of \(\mathrm{exp} : \mathbb{R} \rightarrow \mathbb{R}\),
+        \[\mathrm{e}^{A} = 
+            \begin{bmatrix}
+                \mathrm{e}^{\alpha_1} & & & 0 \\
+                & \mathrm{e}^{\alpha_2} & & \\
+                & & \ddots & \\
+                0 & & & \mathrm{e}^{\alpha_n}
+            \end{bmatrix}
+        \]
+        and if \(\lVert A - I \rVert < 1\), then \(\lvert \alpha_k - 1\rvert < 1\) for all \(k = 1, 2, \dots, n\) and again by the Taylor series of \(\mathrm{log} : (0,2) \rightarrow \mathbb{R}\),
+        \[\log{(A)} = 
+            \begin{bmatrix}
+                \log{\left(\alpha_1\right)} & & & 0 \\
+                & \log{\left(\alpha_2\right)} & & \\
+                & & \ddots & \\
+                0 & & & \log{\left(\alpha_n\right)}
+            \end{bmatrix}
+        \]
+        Let \(A \in \mathrm{M}_n(\mathbb{C})\) be diagonalizable and \(\lVert A - I \rVert < 1\).
+        Let \(U \in \mathrm{M}_n(\mathbb{C})\) be a unitary matrix such that \(B = UAU^{-1}\) is diagonal,
+        \[B = 
+        \begin{bmatrix}
+            \alpha_1 & & & 0 \\
+            & \alpha_2 & & \\
+            & & \ddots & \\
+            0 & & & \alpha_n
+        \end{bmatrix}
+        \]
+        Then \(\lVert B - I \rVert = \lVert UAU^{-1} - I \rVert = \lVert A - I \rVert < 1\), so \(\lvert \alpha_k - 1 \rvert < 1\) for all \(k = 1, 2, \dots, n\), and 
+        \[\log{(B)} = 
+        \begin{bmatrix}
+            \log{(\alpha_1)} & & & 0 \\
+            & \log{(\alpha_2)} & & \\
+            & & \ddots & \\
+            0 & & & \log{(\alpha_n)}
+        \end{bmatrix}\]
+        So 
+        \[\mathrm{e}^{\log{(B)}} = 
+        \begin{bmatrix}
+            \mathrm{e}^{\log{(\alpha_1)}} & & & 0 \\
+            & \mathrm{e}^{\log{(\alpha_2)}} & & \\
+            & & \ddots & \\
+            0 & & & \mathrm{e}^{\log{(\alpha_n})}
+        \end{bmatrix}
+        = B\]
+        Hence,
+        \[\mathrm{e}^{\log{(A)}} = \mathrm{e}^{\log{\left(U^{-1}BU\right)}} = \mathrm{e}^{U^{-1}\log{(B)}U} = U^{-1}\mathrm{e}^{\log{(B)}}U = U^{-1}BU = A\] 
+
+        Thus, for every diagonalizable matrix \(A\) with \(\lVert A - I \rVert < 1\), \(\mathrm{e}^{\log{(A)}} = A\).
+        Since the exponential and logarithmic maps are continuous and diagonalizable matrices are dense in \(\mathrm{M}_n(\mathbb{C})\), 
+        \(\mathrm{e}^{\log{(A)}} = A\) for all \(A \in \mathrm{M}_n (\mathbb{C})\) with \(\lVert A - I \rVert < 1\).
+
+        For \(\log{\left(\mathrm{e}^A\right)}\) to be defined, \(\lVert \mathrm{e}^A - I \rVert < 1\), so
+        \[\lVert \mathrm{e}^A - I \rVert = \left\lVert A + \frac{A^2}{2!} + \cdots \right\rVert \leq \lVert A \rVert + \frac{\lVert A \rVert^2}{2} + \cdots = \mathrm{e^{\lVert A \rVert}} - 1 < 1\]
+        hence \(\mathrm{e^{\lVert A \rVert}} < 2\).
+
+        Let \(A \in \mathrm{M}_n(\mathbb{C})\) be diagonalizable and \(\lVert A \rVert < \log{(2)}\).
+        Let \(U \in \mathrm{M}_n(\mathbb{C})\) be a unitary matrix such that \(B = UAU^{-1}\) is diagonal,
+        \[B = 
+        \begin{bmatrix}
+            \alpha_1 & & & 0 \\
+            & \alpha_2 & & \\
+            & & \ddots & \\
+            0 & & & \alpha_n
+        \end{bmatrix}
+        \]
+        Then
+        \[\mathrm{e}^{B} = 
+        \begin{bmatrix}
+            \mathrm{e}^{\alpha_1} & & & 0 \\
+            & \mathrm{e}^{\alpha_2} & & \\
+            & & \ddots & \\
+            0 & & & \mathrm{e}^{\alpha_n}
+        \end{bmatrix}\]
+        with \(\lVert \mathrm{e}^B - I \rVert = \lVert \mathrm{e}^{UAU^{-1}} - I \rVert = \lVert U \mathrm{e}^A \rVert U^{-1} - I \rVert = \lVert \mathrm{e}^A - I \rVert < 1\).
+        So \(\lvert \mathrm{e}^{\alpha_k} - 1 \rvert < 1\) for all \(k = 1, 2, \dots, n\), and hence \(\log{\left(\mathrm{e}^B\right)}\) is defined.
+        Then
+        \[\log{\left(\mathrm{e}^B\right)} = 
+        \begin{bmatrix}
+            \log{\left(\mathrm{e}^{\alpha_1}\right)} & & & 0 \\
+            & \log{\left(\mathrm{e}^{\alpha_2}\right)} & & \\
+            & & \ddots & \\
+            0 & & & \log{\left(\mathrm{e}^{\alpha_k}\right)}
+        \end{bmatrix}
+        = B\]
+        Hence,
+        \[\log{\left(\mathrm{e}^A \right)} = \log{\left(\mathrm{e}^{U^{-1}BU} \right)}= \log{\left(U^{-1}\mathrm{e}^B U\right)} = U^{-1}\log{\left(\mathrm{e}^B \right)}U = U^{-1}BU = A \]
+
+        Thus, for every diagonalizable matrix \(A\) with \(\lVert A \rVert < \log{(2)}\), \(\log{\left(\mathrm{e}^A\right)} = A\).
+        Since the exponential and logarithmic maps are continuous and diagonalizable matrices are dense in \(\mathrm{M}_n(\mathbb{C})\), 
+        \(\log{\left(\mathrm{e}^A\right)} = A\) for all \(A \in \mathrm{M}_n (\mathbb{C})\) with \(\lVert A \rVert < \log{(2)}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(A \in \mathrm{M}_n (\mathbb{C})\) and define \(\omega : \mathbb{R} \rightarrow \mathrm{GL}_n (\mathbb{C})\) by \(\omega(t) \coloneqq \mathrm{e}^{tA}\).
+    This a group homomorphism.
+    Moreover, the map is differentiable.
+
+    \begin{proof}
+        Using the definition of the derivative, prove for \(t = 0\).
+        \begin{align*}
+            \lim_{t \to 0} \frac{\mathrm{e}^{tA} - I}{t - 0} &= \lim_{t \to 0} \frac{1}{t} \left(tA + \frac{t^2 A^2}{2!} + \frac{t^3 A^3}{3!} + \cdots \right) \\
+            &= \lim_{t \to 0} \left(A + \frac{t A^2}{2!} + \frac{t^2 A^3}{3!} + \cdots \right) \\
+            &= A + \lim_{t \to 0} t\left(\frac{A^2}{2!} + \frac{t A^3}{3!} + \cdots \right)
+        \end{align*}
+        The norm of \(\displaystyle \lim_{t \to 0} \left(\frac{A^2}{2!} + \frac{t A^3}{3!} + \cdots \right)\) is bounded.
+        \[\left\lVert \lim_{t \to 0} \left(\frac{A^2}{2!} + \frac{t A^3}{3!} + \cdots \right) \right\rVert \leq \sum_{n=2}^\infty \frac{\lvert t \rvert^{n-2} \lVert A \rVert^n}{n!} \leq \mathrm{e}^{\lVert A \rVert}\]
+        Hence, the limit exists and is \(0\), \(\omega\) is differentiable at \(t = 0\), and \(\omega ' (0) = A\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(\phi: (\mathbb{R}, +) \rightarrow (\mathbb{R}^{>0}, \cdot) \) be a continuous group homomorphism.
+    There exists \(a \in \mathbb{R}\) such that \(\phi(t) = \mathrm{e}^{ta}\) for all \(t \in \mathbb{R}\).
+
+    \begin{proof}
+        Let \(\phi(1) = b\).
+        Since \(\phi\) is a group homomorphism, for all \(k \in \mathbb{N}\), \(\phi(k) = b^k\) and \(\phi(-k) = b^{-k}\).
+        
+        Next, consider \(\phi\left(\frac{1}{2}\right)\).
+        \[\phi(1) = \phi\left(\frac{1}{2} + \frac{1}{2}\right) = \phi\left(\frac{1}{2}\right) \cdot \phi\left(\frac{1}{2}\right) = b\]
+        So \(b\) has a unique square root.
+        Similarly, for all \(\frac{k}{m} \in \mathbb{Q}\), \(\phi\left(\frac{k}{m}\right) = b^{k/m}\).
+        Since \(\mathbb{Q}\) is dense in \(\mathbb{R}\) and \(\phi\) is continuous, for all \(t \in \mathbb{R}\), \(\phi(r) = b^t\).
+        Changing the base, \(\phi (t) = \mathrm{e}^{t \log(b)}\), thus \(a  = \log (b)\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(n \in \mathbb{N}\). For every \(m \in \mathbb{N}\), there exists \(\varepsilon > 0\) such that if \(A \in \mathrm{M}_n (\mathbb{C})\) with \(\lVert A \rVert < \varepsilon\),
+    then \(B = \mathrm{e}^{\frac{1}{m}A}\) is the unique element in \(\exp (B_\varepsilon (0))\) such that \(B^m = \mathrm{e}^A\).
+    
+    \begin{proof}
+        Let \(0 < \varepsilon < \frac{\log{(2)}}{m}\).
+        Suppose \(C \in \exp{\left(B_\varepsilon (0)\right)} \coloneqq \left\{\mathrm{e}^X \in \mathrm{M}_n (\mathbb{C}) : \lVert X \rVert < \varepsilon \right\}\) such that \(C^m = \mathrm{e}^A\).
+        Then \(\lVert C \rVert < \mathrm{e}^\varepsilon < \mathrm{e}^{\frac{\log{(2)}}{m}} = \sqrt[m]{2}\), and since \(\exp\) and \(\log\) are inverses, there exists \(D \in B_\varepsilon (0)\) such that \(\mathrm{e}^D = C\).
+        Raising both sides by \(m\), \(\mathrm{e}^{mD} = \mathrm{e}^A\).
+        Since \(\lVert mD \rVert < \log{(2)}\) and \(\lVert A \rVert < \log{(2)}\),
+        again the functions are inverses of each other, so \(\log{\left(\mathrm{e}^{mD}\right)} = \log{\left(\mathrm{e}^A\right)}\) gets \(mD = A\) which implies that \(D = \frac{1}{m}A\).
+        So \(C = \mathrm{e}^{\frac{1}{m}A}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(n \in \mathbb{N}\) and suppose \(\omega:\mathbb{R} \rightarrow \mathrm{GL}_n(\mathbb{C})\) is a continuous group homomorphism.
+    Then there exists a unique matrix \(A \in \mathrm{M}_n(\mathbb{C})\) such that \(\omega(t) = \mathrm{e}^{tA}\) for all \(t \in \mathbb{R}\).
+    \begin{proof}
+        Let \(0 < \varepsilon < \frac{\log{(2)}}{2} < 1\) and \(U = \exp{\left(B_\varepsilon (0)\right)}\).
+        By continuity of \(\omega\), there exists \(t_0 > 0\) such that if \(\lvert t - 0 \rvert \leq t_0\), then \(\lVert \omega (t) - \omega (0) \rVert < \varepsilon\).
+        Since \(\omega\) is a group homomorphism, \(\omega(0) = I\).
+
+
+        Consider \(\omega (t_0) \in U\) and let \(A\) be such that \(t_0 A = \log{(\omega (t_0))}\).
+        Note that \(t_0A \in \log{(U)} = B_\varepsilon (0)\) and hence \(\lVert t_0 A \rVert < \varepsilon\).
+        Such an \(A\) exists since \(\lVert \omega (t_0) - I\rVert < \varepsilon < 1\).
+        Then \(\mathrm{e}^{t_0 A} = \omega (t_0)\).
+
+
+        Next, consider \(\omega\left(\frac{t_0}{2}\right)\).
+        Since \(\omega\) is a group homomorphism,
+        \[\omega (t_0) = \omega \left(\frac{t_0}{2} + \frac{t_0}{2}\right) = \omega \left(\frac{t_0}{2}\right)^2\]
+        
+        
+        By the previous theorem, since \(\lVert t_0 A \rVert < \varepsilon\), there exists a unique element \(Y \in U\) such that \(Y^2 = \mathrm{e}^{t_0A} = \omega (t_0)\).
+        Thus, \(Y = \omega \left(\frac{t_0}{2}\right)\).
+
+
+        Repeat the above process for \(t_k = \frac{t_0}{2^k}\), \(k = \mathrm{N}\).
+        Note that for all \(k \in \mathbb{N}\), \(\omega \left(\frac{t_0}{2^k}\right) = \omega \left(\frac{t_0}{2^{k+1}} + \frac{t_0}{2^{k+1}}\right) = \omega \left(\frac{t_0}{2^{k+1}}\right)^2\)
+        and that since \(\left\lVert \frac{t_0}{2^k} A \right\rVert = \frac{1}{2^k} \lVert t_0A \rVert < \varepsilon \), \(Y_k = \mathrm{e}^{\frac{1}{2} \left(\frac{t_0}{2^k} A \right)} = \mathrm{e}^{\frac{t_0}{2^{k+1}} A }\)
+        is the unique element in \(U\) such that \(Y_k^2 = \mathrm{e}^{\frac{t_0}{2^k}A}\).
+
+        So for all \(k = 0, 1, 2, \dots\), \(\omega \left(\frac{t_0}{2^k}\right)\) is defined by \(\omega \left(\frac{t_0}{2^k}\right) = \mathrm{e}^{\frac{t_0}{2^k}X}\).
+        Since \(\omega\) is a group homomorphism:
+        \begin{itemize}
+            \item For each \(m \in \mathbb{N}\), define 
+            \[\omega \left(\frac{mt_0}{2^k}\right) = \omega \left(\frac{t_0}{2^k}\right)^m = \mathrm{e}^{\frac{mt_0}{2^k}X}\]
+            \item For inverses, if \(y = \frac{mt_0}{2^k}\) for some \(k\) and \(m\), then
+            \[\omega (-y) = \left(\omega(y)\right)^{-1} = \left( \mathrm{e}^{yX}\right)^{-1} = \left( \mathrm{e}^{-yX}\right) = \mathrm{e}^{\frac{ - mt_0}{2^k}X}\]
+        \end{itemize}
+        Thus for all \(y \in \left\{\frac{mt_0}{2^k}, m \in \mathbb{Z}, k = 0, 1, 2, \dots\right\}\), \(\omega (y) = \mathrm{e}^{yA}\).
+        Finally, since the set of all such \(y\) is dense in \(\mathbb{R}\) and \(\omega\) is a continuous map,
+        for all \(t \in \mathbb{R}\), \(\omega (t) = \mathrm{e}^{tA}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    For every \(A \in \mathrm{M}_n(\mathbb{C})\), \(\det(\mathrm{e}^A) = \mathrm{e}^{\operatorname{tr}}{(A)}\).
+    \begin{proof}
+        Let \(X \in \mathrm{M}_n (\mathbb{C}\) be diagonal.
+        FINISH
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}[Lie product, Trotter product]
+    Let \(n \in \mathbb{N}\) and \(X,Y \in \mathrm{M}_n(\mathbb{C})\).
+    Then \[\mathrm{e}^{X+Y} = \lim_{k \to 0} \left(\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\right)^k\]
+
+    \begin{proof}
+        For all \(k \in \mathbb{N}\),
+        \[\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}} = \left(I + \frac{X}{k} + \frac{X^2}{k^2 2!} + \cdots \right) \left(I + \frac{Y}{k} + \frac{Y^2}{k^2 2!} + \cdots \right) 
+        = I + \frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2}C_k\]
+        where there exists \(c > 0\) such that \(\lVert C_k \rVert < c\) for all \(k\).
+        Why?
+        Observe that by submultiplicativity and the triangle inequality,
+        \[\lVert \mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\rVert \leq \mathrm{e}^{\frac{\lVert X \rVert}{k}} \mathrm{e}^{\frac{\lVert Y \rVert}{k}} = \mathrm{e}^{\frac{\lVert X \rVert + \lVert Y \rVert}{k}}\]
+        Since the exponential map is continuous, \(\displaystyle \lim_{k \to \infty} \mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}} = I\) so for large enough \(k\),
+        \(\lVert \mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}} - I\rVert < 1\) so \(\log\left(\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\right)\) is defined.
+        Next,
+        \begin{align*}
+            \log{\left(\mathrm{e}^{\frac{X}{k}}\mathrm{e}^{\frac{Y}{k}}\right)} &= \log{\left(I + \frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} C_k\right)} \\
+            &= \left(\frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} C_k\right) - \frac{1}{2}\left(\frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} C_k\right)^2 + \frac{1}{3}\left(\frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} C_k\right)^3 - \cdots \\
+            &= \frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} D_k
+        \end{align*}
+        And \(D_k\) is uniformly bounded in norm, so there exists \(d > 0\) such that \(\lVert D_k\rVert < d\) for all \(k\) large enough.
+        Thus, multiply both sides by \(k\) and exponentiating,
+        \begin{align*}
+            k \log{\left(\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\right)} &= k \left(\frac{X}{k} + \frac{Y}{k} + \frac{1}{k^2} D_k\right) \\
+            \left(\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\right)^k &= \mathrm{e}^{X + Y + \frac{1}{k} D_k}
+        \end{align*}
+        Thus, since the norm of \(D_k\) is bounded uniformly, that is, \(\lVert D_k \rVert < \infty\) for large enough \(k\),
+        \[\lim_{k \to \infty} \left(\mathrm{e}^{\frac{X}{k}} \mathrm{e}^{\frac{Y}{k}}\right)^k = \mathrm{e}^{X + Y}\]
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(\phi : \mathbb{R} \rightarrow \mathrm{M}_n(\mathbb{C})\) and \(\psi : \mathbb{R} \rightarrow \mathrm{M}_n(\mathbb{C})\) be differentiable functions.
+    Then for all \(s \in \mathbb{R}\),
+    \[(\phi \psi)'(s) = \phi'(s)\psi(s)  +\phi(s)\psi'(s)\]
+    \begin{proof}
+        \begin{align*}
+            (\phi \psi)'(s) &= \lim_{x \to s} \frac{\phi(x)\psi(x) - \phi(s)\psi(s)}{x-s}\\
+            &= \lim_{x \to s} \frac{\phi(x)\psi(x) - \phi(s)\psi(s) + \phi(s)\psi(x) - \phi(s)\psi(x)}{x-s}\\
+            &= \lim_{x \to s} \frac{\phi(x)\psi(x) - \phi(s)\psi(s) + \phi(s)\psi(x) - \phi(s)\psi(x)}{x-s}\\
+            &= \lim_{x \to s} \left(\frac{\left(\phi(x) - \phi(s) \right) \psi(x)}{x-s} + \frac{\phi(s)\left(\psi(x)-\psi(s) \right)}{x-s}\right)\\
+            &= \phi'(s)\psi(s)  +\phi(s)\psi'(s)
+        \end{align*}
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(\phi : \mathbb{R} \rightarrow \mathrm{M}_n(\mathbb{C})\) be differentiable and \(A,B \in \mathrm{M}_n(\mathbb{C})\).
+    Let \(\psi : \mathbb{R} \rightarrow \mathrm{M}_n(\mathbb{C})\) be defined by \(\psi(t) = A \phi(t) B\).
+    Then \(\psi\) is also differentiable and \(\psi'(t) = A \phi'(t) B\).
+    \begin{proof}
+        \begin{align*}
+            \psi ' (t) &= \lim_{x \to t} \frac{\psi(x) - \psi(s)}{x-t}\\
+            &= \lim_{x \to t} \frac{A \phi(x) B - A \phi(t) B}{x-t}\\
+            &= \lim_{x \to t} \frac{A \left(\phi(x) - \phi(t) \right)B}{x-t}\\
+            &= A \left(\lim_{x \to t} \frac{\phi(x) - \phi(t)}{x-t} \right) B\\
+            &= A \phi'(t) B
+        \end{align*}
+    \end{proof}
+\end{thmstyle}
+
+
+\subsection{Examples}
+
+\subsubsection{Vector spaces}
+\paragraph{normed vector space}
+\begin{quote}
+    Let \(V = \mathbb{R}^m\) and let \(1 \leq p < \infty\).
+    The a norm on \(\mathbb{R}^m\) is
+    \[\lVert (a_1, a_2, \dots, a_m) \rVert_p = \left(\sum_{i=1}^m \lvert a_i \rvert^p \right)^{1/p}\]
+\end{quote}
+
+\paragraph{complete metric space}
+\begin{quote}
+    \(\mathrm{M}_n(\mathbb{R})\) is a complete metric space since \(\mathrm{M}_n(\mathbb{R}) \cong \mathbb{R}^{n^2}\).
+\end{quote}
+
+\paragraph{normed algebra}
+\begin{quote}
+    \begin{itemize}
+        \item \(\mathrm{M}_n(\mathbb{R})\) with the operator norm is a normed algebra.
+        In fact, since \(\mathrm{M}_n(\mathbb{R})\) is finite-dimensional, every norm on it will induce a normed algebra.
+        \item The set of continuous functions on a closed interval \(f: I \rightarrow \mathbb{R}\) equipped with the sup norm
+        \(\displaystyle \lVert f \rVert_\infty = \sup_{x \in I} \{ \lvert f (x) \rvert\}\) is a normed algebra.
+        \item Not every norm on an infinite-dimensional vector space induces a normed algebra.
+    \end{itemize}
+\end{quote}
+
+\subsubsection{Matrices}
+\paragraph{Jordan form}
+\begin{quote}
+\end{quote}
+
+
+\section{Matrix Lie groups}
+
+\subsection{Definitions}
+
+\paragraph{manifold}
+\begin{quote}
+    An \(n\)-dimension \textbf{manifold} is a second-countable Hausdorff topological space \(X\) such that for every \(x \in X\), there is an open set \(x \in V \subseteq X\) and
+    a homeomorphism \(\phi\) from \(V\) onto an open neighborhood of \(0 \in \mathbb{R}^n\) or \(\mathbb{C}^n\) (real or complex manifold).
+\end{quote}
+
+\paragraph{smooth manifold}
+\begin{quote}
+    A manifold \(X\) is \textbf{smooth} if and only if for all \(x,y \in X\) and homeomorphisms \(\phi: V_x \rightarrow \phi(V_x) \subseteq \mathbb{R}^n\) and 
+    \(\psi: V_y \rightarrow \psi(V_y) \subseteq \mathbb{R}^n\), the map \(\psi \circ \phi^{-1} : \phi(V_x \cap V_y) \rightarrow \psi (V_x \cap V_y)\) is smooth (infinitely differentiable).
+\end{quote}
+
+\paragraph{Lie group}
+\begin{quote}
+    A \textbf{Lie group} is a group \(G\) that is a smooth manifold where the group operation \(G \times G \rightarrow G, (g, h) \mapsto gh\)
+    and the inverse operation \(G \rightarrow G, g \mapsto g^{-1}\) are smooth maps.
+\end{quote}
+
+\paragraph{matrix Lie group}
+\begin{quote}
+    A \textbf{matrix Lie group} is a closed subgroup of \(\mathrm{GL}_n(\mathbb{R})\)  (or \(\mathbb{C}\)) for some \(n \in \mathbb{N}\).
+\end{quote}
+
+\paragraph{Lie algebra of a matrix Lie group}
+\begin{quote}
+    Let \(G \subseteq \mathrm{GL}_n(\mathbb{C})\) be a matrix Lie group.
+    The \textbf{Lie algebra} of \(G\) is the set 
+    \[\mathfrak{g} \coloneqq \left\{X \in \mathrm{M}_n(\mathbb{C}) \mid \mathrm{e}^{tX} \in G \ \textrm{for all } t \in \mathbb{R}\right\}\]
+    with the \textbf{Lie bracket} \([X, Y] = XY - YX\).
+\end{quote}
+
+\paragraph{complex matrix Lie group}
+\begin{quote}
+    A matric Lie group \(G \subset \mathrm{GL}_n(\mathbb{C})\) is \textbf{complex} if its Lie algebra \(\mathfrak{g}\) is a complex subspace of \(\mathrm{M}_n(\mathbb{C})\).
+    In other words, if for all \(X \in \mathfrak{g}\), \(\mathrm{i}X \in \mathfrak{g}\).
+\end{quote}
+
+\paragraph{representation}
+\begin{quote}
+    Let \(G\) be a group and \(V\) a vector space.
+    A \textbf{representation} of \(G\) on \(V\) is a group homomorphism \(\pi: G \rightarrow \mathrm{Lin}(V)\) where \(\mathrm{Lin}(V) \coloneqq \left\{ T : V \rightarrow V \mid T \text{ is linear and bijective}\right\}\),
+    the set of all linear and bijective maps on \(V\).
+\end{quote}
+
+\paragraph{adjoint representation of a matrix Lie group}
+\begin{quote}
+    Let \(G\) be a matrix Lie group and \(\mathfrak{g}\) its Lie algebra.
+    For all \(g \in G\), define \(\mathrm{Ad}_g: \mathfrak{g} \rightarrow \mathfrak{g}\) for all \(X \in \mathfrak{g}\) by
+    \[\operatorname{Ad}_g{(X)} = gXg^{-1}\]
+    This gives a representation of \(G\) on \(\mathfrak{g}\) called the \textbf{adjoint representation} of \(G\).
+\end{quote}
+
+\paragraph{analytical subgroup}
+\begin{quote}
+    Let \(G\) be a matrix Lie group and \(H\) a subgroup of \(G\) that is not necessarily closed.
+    \(H\) is an \textbf{analytical subgroup} if
+    \begin{enumerate}
+        \item The set \(L = \{X \in \mathfrak{g} \mid \mathrm{e}^{tX} \in H \text{ for all} t \in \mathbb{R}\}\).
+        \item \(H\) is generated by the set \(\{\mathrm{e}^X : X \in L \}\).
+    \end{enumerate}
+\end{quote}
+
+\paragraph{universal cover}
+\begin{quote}
+    Let \(G\) be a matrix Lie group.
+    A \textbf{universal cover} for \(G\) is a simply connected Lie group \(\tilde{G}\) such that there exists a continuous group homomorphism \(\phi: \tilde{G} \rightarrow G\) such that
+    \(\mathrm{d}\phi: \tilde{\mathfrak{g}} \rightarrow \mathfrak{g}\) is an isomorphism.
+\end{quote}
+
+\subsection{Theorems}
+
+\begin{thmstyle}
+    Let \(G \subseteq \mathrm{GL}_n (\mathbb{C})\) be a matrix Lie group.
+    Then the Lie algebra \(\mathfrak{g}\) of \(G\) is a real subspace of \(\mathrm{M}_n(\mathbb{C})\).
+
+    \begin{proof}
+        First, note that \(O \in \mathfrak{g}\).
+        Next, let \(X \in \mathfrak{g}\) and \(\alpha \in \mathbb{R}\).
+        Then \(\mathrm{e}^{t(\alpha X)} = \mathrm{e}^{t\alpha X} \in G\) for all \(t \in \mathbb{R}\), hence \(\alpha X \in \mathfrak{g}\).
+
+        Let \(X,Y\in \mathfrak{g}\).
+        Then for every \(k \in \mathbb{N}\) and \(t \in \mathbb{R}\), \(\mathrm{e}^{\frac{tX}{k}} \cdot \mathrm{e}^{\frac{tY}{k}} \in G\).
+        So \(\left( \mathrm{e}^{\frac{tX}{k}} \cdot \mathrm{e}^{\frac{tY}{k}} \right)^k\) is also in \(G\).
+        Since \(G\) is closed,
+        \[\lim_{k \to \infty} \left( \mathrm{e}^{\frac{tX}{k}} \cdot \mathrm{e}^{\frac{tY}{k}} \right)^k = \mathrm{e}^{tX + tY} = \mathrm{e}^{t(X+Y)} \in G\]
+        Hence \(X + Y \in \mathfrak{g}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    If \(g \in G\) and \(X \in \mathfrak{g}\), then \(gXg^{-1} \in \mathfrak{g}\).
+    In other words, a matrix Lie group \(G\) acts on its Lie algebra \(\mathfrak{g}\) by conjugation.
+
+    \begin{proof}
+        Since \(g\) is invertible,
+        \[\mathrm{e}^{t(gXg^{-1})} = g \mathrm{e}^{tX} g^{-1}\]
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    For all \(X, Y \in \mathfrak{g}\), \(XY - YX \in \mathfrak{g}\).
+
+    \begin{proof}
+        Define \(\phi(t) \coloneqq \mathrm{e}^{tX} Y \mathrm{e}^{-tX}\).
+        Note that for all \(t \in \mathbb{R}\), \(\phi(t) \in \mathfrak{g}\) since \(\mathrm{e}^{tX} \in G\).
+        Since \(\mathfrak{g}\) is a real subspace of \(\mathrm{M}_n(\mathbb{C})\), for all \(t \neq 0 \in \mathbb{R}\),
+        \[\frac{\phi(t) - \phi(0)}{t - 0} \in \mathfrak{g}\]
+        Moreover, \(\mathfrak{g}\) is a finite-dimensional normed vector subspace of \(\mathrm{M}_n(\mathbb{C})\), thus it is also complete and a closed subspace.
+        Thus 
+        \[\phi'(0) = \lim_{t \to 0} \frac{\phi(t) - \phi(0)}{t - 0} \in \mathfrak{g} \]
+        Finally, by the product rule,
+        \[\phi'(0) = \left.\frac{\mathrm{d}}{\mathrm{d}t}\left(\mathrm{e}^{tX}\right)\right\vert_{t = 0} \cdot  Y\mathrm{e}^{-tX} + \mathrm{e}^{tX} \cdot \left. \frac{\mathrm{d}}{\mathrm{d}t} \left(Y\mathrm{e}^{-tX}\right)\right\vert_{t = 0} = XY - YX\]
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(G\) be a matrix Lie group and \(\mathfrak{g}\) its Lie algebra.
+    If \(G\) is abelian, then \(\mathfrak{g}\) is abelian.
+    \begin{proof}
+        Let \(X,Y \in \mathfrak{g}\).
+        Then
+        \begin{align*}
+            [X,Y] &= \left.\frac{\mathrm{d}}{\mathrm{d}t} \left(\mathrm{e}^{tX}Y\mathrm{e}^{-tX}\right)\right\vert_{t=0} \\
+            &= \left.\frac{\mathrm{d}}{\mathrm{d}t} \left(\mathrm{e}^{tX} \left.\left( \frac{\mathrm{d}}{\mathrm{d}s} \mathrm{e}^{sY}\right)\right\vert_{s=0} \mathrm{e}^{-tX} \right)\right\vert_{t=0} \\
+            &= \left.\frac{\mathrm{d}}{\mathrm{d}t} \left(\left.\frac{\mathrm{d}}{\mathrm{d}s} \left(\mathrm{e}^{tX}\mathrm{e}^{sY}\mathrm{e}^{-tX}\right)\right\vert_{s=0}\right)\right\rvert_{t=0} \\
+            &= \left.\frac{\mathrm{d}}{\mathrm{d}t} \left(Y \right)\right\rvert_{t=0} \\
+            &=0
+        \end{align*}
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(G\) and \(H\) be matrix Lie groups and \(\phi: G \rightarrow H\) be a continuous group homomorphism.
+    Then there exists a unique Lie algebra homomorphism \(T : \mathfrak{g} \rightarrow \mathfrak{h}\) such that \(\phi\left(\mathrm{e}^X \right) = \mathrm{e}^{T(X)}\) for all \(X \in \mathfrak{g}\).
+
+    \begin{proof}
+        Let \(X \in \mathfrak{g}\) and define \(\omega: \mathbb{R} \rightarrow H\) by \(\omega(t) = \phi \left(\mathrm{e}^{tX}\right)\).
+        Then \(\omega\) is a continuous group homomorphism, hence there exists a unique \(Y \in \mathrm{M}_n(\mathbb{C})\) such that \(\omega(t) = \mathrm{e}^{tY}\).
+        Since \(\mathrm{e}^{tY} = \omega(t) = \phi\left(\mathrm{e}^{tX}\right) \in H\) for all \(t \in \mathbb{R}\), \(Y \in \mathfrak{h}\).
+
+        Define \(T : \mathfrak{g} \rightarrow \mathfrak{h}\) such that \(T(X)\) is the unique element \(Y\) from above.
+        Thus, by construction, \(\phi \left(\mathrm{e}^X\right) = \mathrm{e}^{T(X)}\) for all \(X \in \mathfrak{g}\).
+
+        Next, let \(X \in \mathfrak{g}\) and \(s \in \mathbb{R}\).
+        \[T(sX) = \mathrm{e}^{tT(sX)} = \phi\left(\mathrm{e}^{tsX}\right) = \mathrm{e}^{tsT(X)}\]
+    \end{proof}
+\end{thmstyle}
+
+\subsection{Examples}
+
+\paragraph{Lie group}
+\begin{quote}
+    Consider \(\mathrm{GL}_n(\mathbb{R}) \subset \mathrm{M}_n (\mathbb{R}) \cong \mathbb{R}^{n^2}\).
+    For each \(X \in \mathrm{GL}_n (\mathbb{R})\), take the open set around \(X\) to be all of \(\mathrm{GL}_n(\mathbb{R})\) and the identity homomorphism
+    from \(\mathrm{GL}_n(\mathbb{R})\) to \(\mathbb{R}^{n^2}\).
+    Thus, \(\mathrm{GL}_n(\mathbb{R})\) is a manifold.
+    The identity map, matrix multiplcation, and matrix inverse operations are all smooth, so \(\mathrm{GL}_n(\mathbb{R})\) is a smooth manifold and a Lie group.
+\end{quote}
+
+\paragraph{matrix Lie group}
+\begin{quote}
+    Recall that the determinant \(\det : \mathrm{GL}_n (\mathbb{C}) \rightarrow \mathbb{C} \setminus \{0\}\) is a continuous function.
+    \begin{itemize}
+        \item \(\mathrm{GL}_n(\mathbb{R})\): It is closed in itself.
+        \item \(\mathrm{SL}_n (\mathbb{R})\):
+        \(\det{(A)} = 1\), so \(\det : \mathrm{SL}_n (\mathbb{R}) \rightarrow \{1\}\), and \(\{1\}\) is closed in \(\mathbb{R}\).
+        \item \(\mathrm{U}(n)\): 
+        \(\det{\left(A^\ast A\right)} = \overline{\det{(A)}} \det{(A)} = \lvert \det{(A)} \rvert = 1\), so \(\det : \mathrm{U}(n) \rightarrow \{z \in \mathbb{C} : \lvert z \rvert = 1\}\), which is closed in \(\mathbb{C}\).
+        \item \(\mathrm{O}(n)\):
+        \(\det{\left(A^\top A\right)} = \left(\det{(A)}\right)^2 = 1\), so \(\det : \mathrm{O}(n) \rightarrow \{-1, 1\}\), and \(\{-1,1\}\) is closed in \(\mathbb{R}\).
+    \end{itemize}
+    
+\end{quote}
+
+\paragraph{Lie algebras}
+\begin{quote}
+\begin{itemize}
+    \item \(\mathfrak{gl}_n (\mathbb{C}) = \mathrm{M}_n (\mathbb{C}) \).
+    If \(X \in \mathrm{M}_n ( \mathbb{C})\), then \(\mathrm{e}^{tX}\) is invertible.
+    \item \(\mathfrak{sl}_n (\mathbb{C}) = \left\{X \in \mathrm{M}_n (\mathbb{C}) \mid \operatorname{tr}{(X)} = 0 \right\}\)
+    \[\det{\left(\mathrm{e}^{tA}\right)} = \mathrm{e}^{t \cdot \operatorname{tr}{(A)}} = 1\]
+    implies that \(\operatorname{tr}{(A)} = 0\) for all \(t \in \mathbb{R}\).
+    \item \(\mathfrak{u}(n) = \left\{X \in \mathrm{M}_n (\mathbb{C}) \mid X^* = -X \right\}\)
+    \[\left(\mathrm{e}^{tX}\right) \left(\mathrm{e}^{tX}\right)^\ast = \left(\mathrm{e}^{tX}\right) \left(\mathrm{e}^{tX^\ast}\right) = \mathrm{e}^{t\left(X + X^\ast\right)} = I \]
+    This implies that \(X + X^\ast = 0\) so \(X^\ast = -X\).
+    These are called \textbf{skew-symmetric matrices}.
+    \item \(\mathfrak{sl}_n (\mathbb{C}) = \left\{X \in \mathrm{M}_n (\mathbb{R}) \mid X^\top = -X \right\}\)
+    \[\left(\mathrm{e}^{tX}\right) \left(\mathrm{e}^{tX}\right)^\top = \left(\mathrm{e}^{tX}\right) \left(\mathrm{e}^{tX^\top}\right) = \mathrm{e}^{t\left(X + X^\top\right)} = I \]
+    This implies that \(X + X^\top = 0\) so \(X^\top = -X\).
+\end{itemize}
+\end{quote}
+
+\paragraph{complex matrix Lie group}
+\begin{quote}
+\begin{itemize}
+    \item \(\mathrm{GL}_n(\mathbb{C})\)
+    \item \(\mathrm{GL}_2(\mathbb{R})\) is \underline{not} a complex matrix Lie group.
+    Let \(X = \begin{bmatrix}
+        1 & 0 \\
+        0 & \frac{\pi}{2}
+    \end{bmatrix}\).
+    For all \(t \in \mathbb{R}\),
+    \(\mathrm{e}^{tX} = \begin{bmatrix}
+        \mathrm{e}^t & 0 \\
+        0 & \mathrm{e}^{t\frac{\pi}{2}}
+    \end{bmatrix} \in \mathrm{GL}_2(\mathbb{R})\), so \(X \in \mathfrak{g}\).
+    However, for \(t = 1\), \(\mathrm{e}^{\mathrm{i}tX} = \begin{bmatrix}
+        \mathrm{e}^{\mathrm{i}t} & 0 \\
+        0 & \mathrm{e}^{\mathrm{i}t\frac{\pi}{2}}
+    \end{bmatrix} \notin \mathrm{GL}_2(\mathbb{R})\), so \(iX \notin \mathfrak{g}\).
+\end{itemize}
+\end{quote}
+
+\paragraph{Lie algebra homormophism}
+\begin{quote}
+
+\end{quote}
+
+
+\section{Lie algebras}
+
+\subsection{Definitions}
+
+\paragraph{Lie algebra}
+\begin{quote}
+    A \textbf{Lie algebra} is a vector space \(V\) endowed with a binary operation \(\left[ \cdot , \cdot \right] : V \times V \rightarrow V\)
+    called the \textbf{Lie bracket} that satisfies for all \(\mathbf{x}, \mathbf{y}, \mathbf{z} \in V\),
+    \begin{enumerate}
+        \item \(\left[ \cdot , \cdot \right]\) is bilinear.
+        \item \(\left[ \mathbf{x} , \mathbf{y} \right] = - \left[ \mathbf{y} , \mathbf{x} \right]\)
+        \item \(\left[ \mathbf{x} , \left[\mathbf{y} , \mathbf{z} \right] \right] + \left[ \mathbf{y} , \left[\mathbf{z} , \mathbf{x} \right] \right] + \left[ \mathbf{z} , \left[\mathbf{x} , \mathbf{y} \right] \right] = 0\).
+        (the \textbf{Jacobi identity}).
+    \end{enumerate}
+
+    The \textbf{Lie bracket} is anticommutative, not associative, and satisfies the Jacobi identity.
+    For all \(A,B,X,Y,Z \in \mathrm{M}_n(\mathbb{C})\),
+    \begin{itemize}
+        \item \([A,B] = AB - BA = -BA + AB = -(BA - AB) = -[B,A]\)
+        \item \(\bigl[[X,Y],Z\bigr] = [XY-YX,Z] = XYZ-YXZ-ZXY+ZYX\) but \(\bigl[X,[Y,Z]\bigr] = [X,YZ-ZY] = XYZ - XZY - YZX + ZYX\)
+        \item \(\bigl[X,[Y,Z]\bigr] + \bigl[Y,[Z,X]\bigr] + \bigl[Z,[X,Y]\bigr] = [X, YZ - ZY] + [Y, ZX-XZ] + [Z, XY-YX] = 
+        XYZ-XZY-YZX+ZYX+YZX-YXZ-ZXY+XZY+ZXY-ZYX-XYZ+YXZ = 0\)
+    \end{itemize}
+\end{quote}
+
+\paragraph{commutative Lie algebra}
+\begin{quote}
+    A Lie algebra \(V\) is \textbf{commutative} if and only if for all \(\mathbf{x}, \mathbf{y} \in V\), \(\left[\mathbf{x} , \mathbf{y}\right] = 0\).
+\end{quote}
+
+\paragraph{Lie algebra homomorphism}
+\begin{quote}
+    Let \(\mathfrak{g}\) and \(\mathfrak{h}\) be Lie algebras.
+    A map \(T : \mathfrak{g} \rightarrow \mathfrak{h}\) is a \textbf{homomorphism} if and only if \(T\) is linear and 
+    \[T\left(\left[X,Y\right]\right) = \left[T(X),T(Y)\right]\]
+\end{quote}
+
+\paragraph{Lie subalgebra}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    A \textbf{Lie subalgebra} is a subset \(L'\) such that \(L'\) is a subspace of \(L\) and for all \(x, y \in L'\), \([x, y] \in L'\).
+\end{quote}
+
+\paragraph{ideal}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    An ideal of \(L\) is a subspace \(I \subseteq L\) such that for all \(x \in I\) and \(y \in L\), \([x,y] \in I\).
+\end{quote}
+
+\paragraph{quotient Lie algebra}
+\begin{quote}
+    The quotient Lie algebra is \(L/I\) where \(I\) is an ideal of \(L\) equipped with the Lie bracket \([x + I, y + I] \coloneqq [x,y] + I\).
+
+    The Lie bracket is well-defined:
+    \begin{proof}
+        \begin{align*}
+            [x, y] - [x' - y'] \in I \\
+            [x , y] + [x + y'] - [x, y'] = [x' - y'] \\
+            [x, y-y'] - [x - x', y'] \in I
+        \end{align*}
+    \end{proof}
+\end{quote}
+
+\paragraph{direct sum of Lie algebras}
+\begin{quote}
+    Let \(L_1, L_2\) be Lie algebras.
+    The \textbf{direct sum} \(L_1 \oplus L_2\) is the direct sum of vector spaces \(L_1\) and \(L_2\) with Lie bracket
+    \[[(x_1, x_2), (y_1, y_2)] \coloneqq ([x_1, y_1], [x_2, y_2])\]
+
+    The Lie bracket is a Lie bracket.
+    \begin{proof}
+        \([(y,y'), (x,x')] = ([x,y],[y',x']) = (-[x,y], -[x',y']) = -[(x,y), (x',y')]\).
+        \([(\alpha x_1 + x_2, \alpha x_1' + x_2'), (y,y')] = ([\alpha x_1 + x_2, y], [\alpha x_1', + x'_2, x']) = (\alpha [x, y] + [x_2, y], \alpha[x'_1, y] + [x'_2, y'])\).
+        \begin{align*}
+            [(x,x'),[(y,y'),(z,z')]] + [(y,y'),[(z,z'),(x,x')]] + [(z,z'),[(x,x'),(y,y')]]\\
+            = [(x, x'), ([y,z], [y', z'])] + \dots = \\
+            ([x, [y,z]], [x', [y', z']]) + \dots 
+        \end{align*}
+    \end{proof}
+\end{quote}
+
+\paragraph{algebra}
+\begin{quote}
+    Let \(\mathbb{F}\) be \(\mathbb{R}\) or \(\mathbb{C}\).
+    An \textbf{algebra} is a vector space \(\mathcal{A}\) with a multiplication that turns it into a ring, and for all \(\alpha \in \mathbb{F}\), \(a,b \in \mathcal{A}\),
+    \[\alpha(a\cdot b) = (\alpha a) \cdot b = a \cdot (\alpha b)\]
+
+    A Lie algebra can be constructed from an algebra by defining the Lie bracket \([\cdot, \cdot]: \mathcal{A} \times \mathcal{A} \rightarrow \mathcal{A} \) by \([x, y] \coloneqq xy-yx\).
+\end{quote}
+
+\paragraph{derivation}
+\begin{quote}
+    Let \(\mathcal{A}\) be an algebra.
+    A \textbf{derivation} on \(\mathcal{A}\) is a linear map \(D: \mathcal{A} \rightarrow \mathcal{A}\) such that \(D(x, y) = D(x) \cdot y + x \cdot D(y)\).
+
+    If \(D_1\) and \(D_2\) are derivations on \(\mathcal{A}\), then \(D_1 \circ D_2\) is not a derivation on \(\mathcal{A}\), however, \(\alpha D_1 + D_2\) is a derivation on \(\mathcal{A}\) for all \(\alpha \in \mathbb{F}\).
+    Thus, the set \(\mathcal{D}(\mathcal{A})\) of all derivations \(D: \mathcal{A} \rightarrow \mathcal{A}\) is a subspace of \(\mathrm{Lin}(\mathcal{A})\), the set of all linear maps from \(\mathcal{A}\) to \(\mathcal{A}\).
+\end{quote}
+
+\paragraph{representation of a Lie algebra}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    A \textbf{representation} of \(L\) on a vector space \(V\) is a Lie algebra homomorphism \(\pi: L \rightarrow \mathrm{Lin}(V)\) (the set of all linear maps on \(V\)) equipping
+    \(\mathrm{Lin}(V)\) with with \([T, S] \coloneqq T \circ S - S \circ T\).
+\end{quote}
+
+\paragraph{adjoint representation of a Lie algebra}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    For every \(x \in L\), define \(\operatorname{ad}_x : L \rightarrow L\) for all \(y \in L\) by
+    \[\operatorname{ad}_x (y) = [x, y]\]
+    This is the \textbf{adjoint representation} of \(L\) on \(\mathrm{Lin}(L)\) \(\operatorname{ad} : L \rightarrow \mathrm{Lin}(L)\).
+
+    \begin{proof}
+    \end{proof}
+\end{quote}
+
+\paragraph{Killing form}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    The \textbf{Killing form} of \(L\) is a bilinear map \(B : L \times L \rightarrow \mathbb{F}\) by \(B(x, y) \coloneqq \operatorname{tr}{(\mathrm{ad}_x \circ \mathrm{ad}_y)}\).
+\end{quote}
+
+\paragraph{derived Lie subalgebra}
+\begin{quote}
+    Let \(L\) be a Lie algebra.
+    The \textbf{derived Lie subalgebra} of \(L\) is 
+    \[L' \coloneqq [L, L] = \operatorname{span}{\left\{[a, b] \mid a \in L, b \in L\right\}}\]
+\end{quote}
+
+\paragraph{derived series}
+\begin{quote}
+    Denote the derived Lie subalgebra by \(L^{(1)} \coloneqq L'\) and \(L^{(2)} \coloneqq (L^{(1)})'\), and for every \(r \in \mathbb{N}\),
+    \(L^{(r+1)} \coloneqq (L^{(r)})'\).
+    Then
+    \[L \supseteq L' \supseteq L^{(2)} \supseteq \cdots\]
+    which is the \textbf{derived series} of \(L\).
+\end{quote}
+
+\paragraph{solvable Lie algebra}
+\begin{quote}
+    A Lie algebra is \textbf{solvable} if there exists \(r \in \mathbb{N}\) such that \(L^{(r)} = \{0\}\).
+\end{quote}
+
+\paragraph{center}
+\begin{quote}
+    The \textbf{center} of a Lie algebra \(L\) is
+    \[Z(L) \coloneqq \{x \in L \mid [x, y] = 0 \text{ for all} y \in L\}\]
+\end{quote}
+
+\paragraph{simple Lie algebra}
+\begin{quote}
+    A Lie algebra \(L\) is \textbf{simple} if \(\dim{(L)} > 1\) and \(L\) has no proper non-zero ideals.
+\end{quote}
+
+\paragraph{radical}
+\begin{quote}
+    The \textbf{radical} of a finite dimensional Lie algebra is the unique maximal solvable ideal.
+    If \(I\) is any solvable ideal of \(L\), then \(I \subseteq r\).
+\end{quote}
+
+\paragraph{reductive Lie algebra}
+\begin{quote}
+    A \textbf{reductive Lie algebra} is one that is the direct sum of a simple and a one-dimensional Lie algebra.
+\end{quote}
+
+\paragraph{commutator}
+\begin{quote}
+    \[\mathcal{C} \coloneqq \{x \in L \mid [x, A] = 0 \text{ for all} A \in \mathcal{A}\}\]
+\end{quote}
+
+
+\subsection{Theorems}
+
+\begin{thmstyle}
+    If \(D\) and \(D'\) are derivations on an algebra \(\mathcal{A}\), then \(D \circ D' - D' \circ D\) is also a derivation.
+    \(\mathcal{D}(\mathcal{A})\) with this product \([D, D']\) is a Lie algebra.
+
+    \begin{proof}
+        Let \(x, y \in A\).
+        \begin{align*}
+            (D \circ D' - D' \circ D)(xy) &= D \circ D'(xy) - (D' \circ D)(xy) \\
+            &= D \circ D'(x) \cdot y + D'(x) D(y) + D(x)D'(y) + \\
+            x \cdot (D \circ D')(y) - (D' \circ D)(x) \cdot
+        \end{align*}
+
+        FINISH
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}[first isomorphism theorem]
+    Let \(\phi: L \rightarrow L'\) be a Lie algebra homomorphism.
+    The \(\ker{\phi}\) is an ideal of \(L\) and \(L / \ker{\phi}\ \cong \operatorname{Im}{(\phi)}\).
+    
+    \begin{proof}
+        \(\ker{\phi}\) is an ideal.
+
+        Since \(\phi\) is a Lie algebra homomorphism, it is linear, so \(\ker{\phi}\) is a vector space.
+        Let \(x \in \ker{\phi}\) and \(y \in L\).
+        Then \(\phi([x,y]) - [\phi(x), y] = [0,y] = 0\) by bilinearity.
+        So \(\ker{\phi}\) is closed under the Lie bracket, hence it is an ideal.
+
+        Define \(\psi(x + \ker{\phi}) = \phi(x)\).
+        The map is well-defined:
+        ....FINISH
+        Linear map....
+        bijective,
+    
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    If \(\phi:L \rightarrow P\) is a Lie algebra homomorphism, then \(\phi(L') \subseteq P'\).
+    Moreover, if \(\phi\) is surjective, then \(\phi(L') = P'\).
+    This implies that for all \(r \in \mathbb{N}\), \(\phi\left(L^{(r)}\right) \subseteq P^{(r)}\).
+
+    \begin{proof}
+        First, \(\phi(L') = \phi([L,L]) = [\phi(L),\phi(L)] \subseteq [P, P] = P'\).
+        If \(\phi\) is surjective, then \(\phi(L) = P\), so \(\phi(L') = P'\).
+        Note that \(\phi:L' \rightarrow P'\) is a homomorphism of Lie subalgebras since it inherits linearity and the bracket operation.
+        So by repeatedly deriving \(L\), the theorem applies for all \(L^{(r)}\), \(r \in \mathbb{N}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(I\) be an ideal of \(L\).
+    \(L\) is solvable if and only if both \(I\) and \(L/I\) are solvable.
+
+    \begin{proof}
+        Suppose \(L\) is solvable.
+        Since \(I^{(r)} \subseteq L^{(r)}\), \(I\) is solvable.
+        By the above theorem, \(\left(L/I\right)^{(r)} = \pi \left(L^{(r)}\right)\) for all \(r \in \mathbb{N}\) where 
+        \(\pi: L \rightarrow L/I\) is the canonical projection.
+        So \(L/I\) is solvable.
+
+        Suppose \(L/I\) and \(I\) are solvable.
+        Consider again the canonical projection \(\pi: L \rightarrow L/I\).
+        Then \(\left(L^{(r)}\right) = \left(L/I\right)^{(r)} = \{0\}\) for some \(r \in \mathbb{N}\).
+        So \(L^{r} \subseteq I\) for some \(r \in \mathbb{N}\).
+        Then for every \(s \in \mathbb{N}\), \(\left(L^{r}\right)^{s} = L^{(r+s)} \subseteq I^{(s)}\).
+        Since \(I\) is solvable, \(L^k = \{0\}\) for some \(k \in \mathbb{N}\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}[Second isomorphism theorem]
+    Let \(L\) be a finite-dimensional Lie algebra and \(I,J\) be ideals of \(L\).
+    Then \((I+J)/I \cong J/(I\cap J)\).
+
+    \begin{proof}
+        
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    If \(I,J\) are solvable ideals of \(L\), then so is \(I + J\).
+    \begin{proof}
+        By the second isomorphism theorem, \((I+J)/I \cong J/(I \cap J)\).
+        Since \(J/(I \cap J)\) is an ideal of \(J\) and \(J\) is solvable, \(J/(I \cap J)\) is solvable and hence so is \((I+J)/I\).
+        Finally, since \(I\) and \((I+J)/I\) are solvable, \(I + J\) is solvable. 
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Every finite dimensional Lie algebra contains a unique maximal solvable ideal.
+
+    \begin{proof}
+        Suppose \(r\) is a solvable ideal of \(L\) with the largest dimension.
+        Let \(I\) be a solvable ideal of \(L\).
+        Then \(r + I\) is also solvable and since \(r \subseteq r + I\), \(\dim{(r)} \leq \dim{(r+I)}\).
+        However, \(\dim{r}\) is maximal, so \(\dim{(r)} = \dim{(r+I)}\) and \(r = r + I\).
+        So \(I \subseteq r\) and \(r\) is unique.
+    \end{proof}
+\end{thmstyle}
+
+\subsection{Examples}
+
+\paragraph{Lie algebra}
+\begin{quote}
+    The Lie algebra of a matrix Lie group is a Lie algebra.
+    It satisfies the Jacobi identity. 
+    For all \(X, Y, Z \in \mathrm{M}_n (\mathbb{C})\), 
+    \begin{align*}
+        [X, [Y, Z]] + [Y, [Z, X]] + [Z, [X, Y]] &= [X, YZ - ZY] + [Y, ZX - XZ] + [Z, XY - YX]\\
+        &= X(YZ - ZY) - (YZ - ZY)X \\
+        &\qquad + Y(ZX - XZ) - (ZX - XZ)Y \\
+        &\qquad + Z(XY - YX) - (XY - YX)Z \\
+        &= XYZ - XZY -YZX + ZYX \\
+        &\qquad + YZX - YXZ -ZXY + XZY \\
+        &\qquad + ZXY - ZYX - XYZ + YXZ \\
+        &= 0
+    \end{align*}
+\end{quote}
+\paragraph{ideal}
+\begin{quote}
+    Let \(G = \mathrm{GL}_n(\mathbb{R}) \subset \mathrm{M}_n (\mathbb{R}) \cong \mathbb{R}^{n^2}\).
+    Take any point in \(G\).
+    Then, take the open set to be all of \(\mathrm{GL}_n(\mathbb{R})\) and the homeomorphism to be the identity.
+    Thus, \(G\) satisfies all the requirements to be a Lie group.
+\end{quote}
+
+\paragraph{algebra}
+\begin{quote}
+    \begin{itemize}
+        \item \(\mathrm{GL}_n(\mathbb{R})\): It is closed in itself.
+        \item \(\mathrm{SL}_n (\mathbb{R})\):
+        The determinant is a continuous function and \(\det : \mathrm{SL}_n (\mathbb{R}) \rightarrow \{1\}\), and \(\{1\}\) is closed in \(\mathbb{R}\).
+        \item \(\mathrm{U}(n)\): 
+        The determinant is a continuous function and for all unitary matrices \(A\), \(\lvert \det{(A)} \rvert\) = 1, so \(\det : \mathrm{U}(n) \rightarrow \{z \in \mathbb{C} : \lvert z \rvert = 1\}\), which is closed in \(\mathbb{C}\).
+        \item \(\mathrm{O}(n)\):
+        The determinant is a continuous function and \(\det : \mathrm{O}(n) \rightarrow \{-1, 1\}\), and \(\{-1,1\}\) is closed in \(\mathbb{R}\).
+    \end{itemize}
+\end{quote}
+
+\paragraph{adjoint representation}
+\begin{quote}
+\begin{itemize}
+    \item \(\mathfrak{gl}_n (\mathbb{C}) = \mathrm{M}_n (\mathbb{C}) \).
+    If \(X \in \mathrm{M}_n ( \mathbb{C})\), then \(\mathrm{e}^{tX}\) is invertible.
+    \item \(\mathfrak{sl}_n (\mathbb{C}) = \left\{X \in \mathrm{M}_n (\mathbb{C}) \mid \operatorname{tr}{(X)} = 0 \right\}\)
+    PROooooooF
+    \item \(\mathfrak{u}(n) = \left\{X \in \mathrm{M}_n (\mathbb{C}) \mid X^* = -X \right\}\)
+    PROOooOOOf
+    \item \(\mathfrak{sl}_n (\mathbb{C}) = \left\{X \in \mathrm{M}_n (\mathbb{R}) \mid X^\top = -X \right\}\)
+    PROOOOOOOF
+\end{itemize}
+\end{quote}
+
+\paragraph{adjoint representation part 2}
+\begin{quote}
+\begin{itemize}
+    \item \(\mathrm{GL}_n(\mathbb{C})\)
+    \item \(\mathrm{GL}_2(\mathbb{R})\) is \underline{not} a complex matrix Lie group.
+    Let \(X = \begin{bmatrix}
+        1 & 0 \\
+        0 & \frac{\pi}{2}
+    \end{bmatrix}\).
+    For all \(t \in \mathbb{R}\),
+    \(\mathrm{e}^{tX} = \begin{bmatrix}
+        \mathrm{e}^t & 0 \\
+        0 & \mathrm{e}^{t\frac{\pi}{2}}
+    \end{bmatrix} \in \mathrm{GL}_2(\mathbb{R})\), so \(X \in \mathfrak{g}\).
+    However, for \(t = 1\), \(\mathrm{e}^{\mathrm{i}tX} = \begin{bmatrix}
+        \mathrm{e}^{\mathrm{i}t} & 0 \\
+        0 & \mathrm{e}^{\mathrm{i}t\frac{\pi}{2}}
+    \end{bmatrix} \notin \mathrm{GL}_2(\mathbb{R})\), so \(iX \notin \mathfrak{g}\).
+\end{itemize}
+\end{quote}
+
+\paragraph{Killing form}
+
+\paragraph{derived series}
+\begin{quote}
+
+\end{quote}
+
+
+\section{Semisimple Lie algebras}
+
+\subsection{Definitions}
+
+\paragraph{semisimple Lie algebra}
+\begin{quote}
+    A Lie algebra is \textbf{semisimple} if it satifies THEOREM NUMBER.
+\end{quote}
+
+\paragraph{toral subalgebra}
+\begin{quote}
+    Let \(L\) be a finite dimensional Lie algebra.
+    A subalgebra \(\mathcal{A}\) of \(L\) is called \textbf{toral} if for all \(A \in \mathcal{A}\), \(\mathrm{ad}_A : L \rightarrow L\) is diagonalizable.
+\end{quote}
+
+\paragraph{Cartan subalgebra}
+\begin{quote}
+    Let \(L\) be a finite dimensional complex semisimple Lie algebra.
+    A \textbf{Cartan subalgebra} of \(L\) is a maximal abelian subalgebra \(\mathcal{A}\) such that \(\mathrm{ad}_x : L \rightarrow L\) is diagonalizable for all \(x \in \mathcal{A}\).
+\end{quote}
+
+\paragraph{root}
+\begin{quote}
+    Let \(L\) be a finite dimensional complex Lie algebra and \(\mathcal{A}\) be a Cartan subalgebra of \(L\).
+    A non-zero \(\phi \in \mathcal{A}^\ast\) is called a \textbf{root} of \(L\) with respect to \(\mathcal{A}\) if and only if the space
+    \(E_\phi \coloneqq \bigcap_{A \in \mathcal{A}} \ker{(\mathrm{ad}_A - \phi(A) I)}\) is non-trivial.
+    The set of all roots is denoted by \(\Delta\).
+\end{quote}
+
+\paragraph{root decomposition}
+\begin{quote}
+    Let \(\Delta = \{\phi_1, \phi_2, \dots, \phi_r\}\) be the set of all roots of \(L\) with respect to \(\mathcal{A}\).
+    The \textbf{root decomposition} of \(L\) is
+    \[L = \mathcal{A} \oplus E_{\phi_1} \oplus E_{\phi_2} \oplus \cdots \oplus E_{\phi_r}\]
+\end{quote}
+
+\paragraph{rank of a Lie algebra}
+\begin{quote}
+
+\end{quote}
+
+\paragraph{Cartan integer}
+\begin{quote}
+\end{quote}
+
+\paragraph{Weyl group}
+\begin{quote}
+\end{quote}
+
+\paragraph{root system}
+\begin{quote}
+    Let \(V\) be a finite dimensional inner product space.
+    A \textbf{root system} in \(V\) is a finite subset \(\Delta \subseteq V \setminus \{0\}\) such that
+    \begin{enumerate}
+        \item if \(w \in \Delta\), then \(-w \in \Delta\)
+        \item for all \(w, u \in \Delta\), \(\frac{2 \langle w, u \rangle}{\langle u, u \rangle} \in \mathbb{Z}\)
+        \item for all \(w, u \in \Delta\), \(w - \frac{2 \langle w, u \rangle}{\langle u, u \rangle} u in \Delta\)
+    \end{enumerate}
+
+    A \textbf{reduced root system} additionally satisfies that if \(c \in \mathbb{F}\), then \(cw \in \Delta\) if and only if \(c = \pm 1\).
+\end{quote}
+
+\subsection{Theorems}
+
+\begin{thmstyle}[Characterization of semisimple Lie algebras]
+    Let \(L\) be a non-zero finite dimensional Lie algebra.
+    The following are equivalent:
+    \begin{enumerate}
+        \item \(L\) has no non-zero abelian ideals.
+        \item \(L\) has no non-zero solvable ideals.
+        \item The radical of \(L\) is zero.
+        \item The Killing form of \(L\) is non-degenerate.
+        \item \(L\) is the direct sum of simple Lie algebras.
+    \end{enumerate}
+    A \textbf{semisimple Lie algebra} is a Lie algebra that satisfies the theorem.
+
+    \begin{proof}
+        \(1 \implies 2\):
+
+        \(2 \implies 1\):
+
+        If the only solvable ideal of \(L\) is zero, 
+
+        \(2 \iff 3\):
+
+        If \(L\) has no non-zero solvable ideals, then the maximal solvable ideal must be zero, which is the radical of \(L\).
+        If the radical of \(L\) is zero, then there are no non-zero solvable ideals since any other solvable ideal \(I\) must satisfy \(I \subseteq \{0\}\).
+
+        \(4 \implies 1\):
+
+        Assume \(L\) has a non-zero abelian ideal \(I\).
+        Then for every \(0 \neq x \in I\) and \(y, z \in L\),
+        \[\bigl(\operatorname{ad}{(x)} \circ \operatorname{ad}{(y)} \circ \operatorname{ad}{(x)}\bigr)(z) = [x,[y,[x,z]]] = 0\]
+        So \(\left(\operatorname{ad}{(x)} \circ \operatorname{ad}{(y)}\right)^2 = 0\) which implies that
+        \(\operatorname{tr}{\left(\operatorname{ad}{(x)} \circ \operatorname{ad}{(y)}\right)} = 0\).
+        Thus \(B(x,y) = 0\) for all \(y \in L\), so the Killing form \(B\) is degenerate.
+
+        \(2 \implies 4\):
+        
+        Assume the Killing form \(B_L\) of \(L\) is degenerate.
+        Let \(I = \left\{x \in L \mid B_L(x,y) = 0 \text{ for all } y \in L\right\}\).
+        Then \(I\) is a non-zero ideal of \(L\) EXPLAIN WHYYYYYYY.
+        Moreover, \(B_L\) restricts to zero on \(I\).
+        By 2 theorems above (restriction and killing form is zero), \(I\) is solvable.
+
+
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    If the Killing form of \(L\) is non-degenerate, then for every linear map \(f: L \rightarrow \mathbb{F}\) there exists a unique \(z_0 \in L\) such that \(f(x) = B(x,z_0)\).
+
+    \begin{proof}
+        Since \(L\) is finite dimensional, it has the same dimension as its dual \(L^\ast\).
+        Since the Killing form is a bilinear form, fixing \(z_0\) makes \(B(x,z_0)\) a linear functional.
+        
+        For every \(z \in L\), define \(f_z : L \rightarrow \mathbb{F}\) by \(f_z(x) = B(x,z)\) for all \(x \in L\).
+        Then the map \(F:L \rightarrow L^\ast\) defined by \(F(z) = f_z\) is linear.
+        Then,
+        \[\ker{(F)} = \left\{z \mid f_z \equiv 0\right\} = \left\{z \mid B(x,z) = 0 \text{ for all } x \in L \right\}\]
+        From the assumption that \(B\) is non-degenerate, \(\ker{(F)} = \{0\}\).
+        Hence \(F\) is injective.
+        Since \(\dim{(L^\ast)} = \dim{(L)}\), \(F\) is bijective and so \(z_0\) exists and is unique.
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(L\) be a finite dimensional Lie algebra and \(I\) be an ideal of \(L\).
+    The restriction of the Killing form of \(L\) to \(I\) is the Killing form of \(I\).
+
+    \begin{proof}
+        Supppose \(\dim{(L)} = n\) and \(\dim{(I)} = k < n\).
+        Choose a basis \(\{e_1, e_2, \dots, e_n\}\) for \(L\) that extends a basis \(\{e_1, e_2, \dots, e_k\}\) of \(I\).
+        Then for all \(x \in I\), \(\operatorname{ad}{(x)}: L \rightarrow L\) has the matrix form
+        \[\operatorname{ad}{(x)} = \begin{bmatrix}
+            A_{k \times k} & & \ast \\
+            \\
+            & 0 & \\
+        \end{bmatrix}
+        \]
+        where \(A\) is a \(k \times k\) matrix representation of \(\operatorname{ad}{(x)}: I \rightarrow I\) with respect to the basis \(\{e_1, e_2, \dots, e_k\}\).
+        
+        So for \(x, y \in I\) with 
+        \[\operatorname{ad}{(x)} = \begin{bmatrix}
+            X_{k \times k} & & \ast \\
+            \\
+            & 0 & \\
+        \end{bmatrix} \qquad \operatorname{ad}{(y)} = \begin{bmatrix}
+            Y_{k \times k} & & \ast \\
+            \\
+            & 0 & \\
+        \end{bmatrix}
+        \]
+        \[\operatorname{ad}{(x)} \circ \operatorname{ad}{(y)} = \begin{bmatrix}
+            XY & & & \ast \\
+            \\
+            \ast & & 0 & \ast \\
+            & & \ast & 0
+        \end{bmatrix}
+        \]
+        So \(B_L(x,y) = \operatorname{tr}{(\operatorname{ad}{(x)} \circ \operatorname{ad}{(y)})} = \operatorname{tr}{(XY)} = B_I(x,y)\).
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(L\) be a finite dimensional Lie algebra.
+    If the Killing form of \(L\) is \(0\), then \(L\) is solvable.
+    \begin{proof}
+    
+    Claim: For all \(x \in L'\), \(\operatorname{ad}{(x)}\) is nilpotent.
+
+    Let \(x = [y,z] \in L'\) and \(T = \operatorname{ad}{(x)}: L \rightarrow L\).
+    Write \(T = D + N\) in its Jordan-Chevalley decomposition, where \(D\) is the diagonal matrix and \(N\) is the nilpotent matrix.
+
+    Let \(D^\ast\) be the complex conjugate of \(D\).
+    Via Lagrange interpolating polynomials,
+    \[p(x) = \sum_{i=1}^{n} \prod_{j \neq i} \frac{(x-x_j)}{x_i-x_j}y_i\]
+    there exists a polynomial \(p(x)\) such that \(p(D) = D^\ast\).
+    Thus, \(D^\ast N = N D^\ast\) (\(D^\ast\) commutes with \(N\)).
+    
+    Since \(\operatorname{ad}: \operatorname{Lin}{(L)} \rightarrow \operatorname{Lin}{\left(\operatorname{Lin}{(L)}\right)}\)
+    is a Lie algebra homomorphism, so \(\operatorname{ad}{(N)}\) commutes with both \(\operatorname{ad}{(D)}\) and \(\operatorname{ad}{(D^\ast)}\).
+    \(0 = \operatorname{ad}{\left([D, N]\right)} = [\operatorname{ad}{(D)},\operatorname{ad}{(N)}] = 0\).
+
+    Since \(D\) is diagonal, \(\operatorname{ad}{(D)}\) is also diagonal.
+    A basis for \(\operatorname{Lin}{(L)}\) is \(E_{ij} = \begin{bmatrix}
+        0 & \cdots & 0 \\
+        \vdots & 1_{ij} & \vdots \\
+        0 & \cdots & \vdots
+    \end{bmatrix}\).
+    Then
+    \[\begin{bmatrix}
+        \lambda_1 & & 0 \\
+        & \ddots & \\
+        0 & & \lambda_n
+    \end{bmatrix} E_{ij} - E_{ij} \begin{bmatrix}
+        \lambda_1 & & 0 \\
+        & \ddots & \\
+        0 & & \lambda_n
+    \end{bmatrix}
+    = \left(\lambda_i - \lambda_j\right)E_{ij}\]
+    So \(E_{ij}\) is an eigenvector of \(\operatorname{ad}{(D)}\) with eigenvalue \(\lambda_i - \lambda_j\), which means that
+    \(\operatorname{ad}{(D)}\) is diagonalizable with respect to the basis of \(E_{ij}\).
+    The values on the diagonal are then \(\lambda_i - \lambda_j\).
+    Moreover, \(\operatorname{ad}{(D^\ast)}\) is diagonalizable and in particular, \(\left(\operatorname{ad}{(D)}\right)^\ast = \operatorname{ad}{(D^\ast)}\).
+
+    Additionally, since \(N\) is nilpotent, \(\operatorname{ad}{(N)}\) is nilpotent.
+    Assume that \(N^j = 0\).
+    \[\operatorname{ad}^k{(N)}(x) = \sum_{r = 0}^{k} (-1)^{r} \binom{r}{k} n^{k - r} x n^{r}\]
+    Thus, choose \(k = 2j - 1\).
+    Then for \(0 \leq r < j\), the first term satisfies \(k-r > j\) and thus the first term is \(0\).
+    For \(j \leq r \leq 2j - 1\), the second term satisfies \(r > j\) and thus is \(0\) as well.
+    So all of the terms in the summation is \(0\) thus, for \(m \geq 2j - 1\), \(\operatorname{ad}^m{(n)} = 0\), so \(\operatorname{ad}\) is nilpotent.
+
+    Thus from the above, and the uniqueness of the Jordan normal form,
+    \(\operatorname{ad}{(T)} = \operatorname{ad}{(D)} + \operatorname{ad}{(N)}\).
+
+    Thus, \(\operatorname{ad}{(D)}\) is a polynomial of \(\operatorname{ad}{(T)}\).
+    Additionally, \(\operatorname{ad}{(D^\ast)}\) is a polynomial of \(\operatorname{ad}{(T)}\).
+    However, \(D^\ast\) is not necessarily in \(L\), but by what just happended, for all \(W_1 \in L\), \([D^\ast, W_1] = \operatorname{ad}{(W_2)} \in \operatorname{ad}{(L)}\).
+    Finally,
+    \[\operatorname{tr}{(D^\ast T)} = \operatorname{tr}{(D^\ast \operatorname{ad}{[Y,Z]})} \]
+    FINISH
+    So there exists \(A \in L\) such that \([D^\ast, \operatorname{ad}{(y)}] = \operatorname{ad}{A}\).
+    So \(\operatorname{tr}{(\operatorname{ad}{(y)} \operatorname{ad}{(z)})} = B(\operatorname{ad}{(y)},\operatorname{ad}{(z)}) = 0\) by the initial assumption.
+    Since \(n\) is nilpotent and \(D^\ast\) commutes with \(N\), \(D^\ast N\) is nilpotent, so \(\operatorname{tr}{(D^\ast N)} = 0\).
+
+
+    Blah blah blah blah blah.
+    Thus for all \(x \in L'\), \(\operatorname{ad}{(x)}\) is nilpotent.
+
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(L\) be a finite dimensional Lie algbera and \(\rho: L \rightarrow \operatorname{Lin}{(V)}\) be a representation of \(L\) on a non-zero finite dimensional vector space \(V\).
+    If \(\rho(X)\) is a nilpotent matrix for all \(X \in L\), then there exists a non-zero \(w \in V\) such that \(\rho(X)(w) = 0\) for all \(X \in L\).
+
+    In other words, \(\displaystyle \cap_{X \in L} \ker{(\rho(x))} \neq \{0\}\)
+
+    \begin{proof}
+        Proof by induction on \(\dim{(L)}\).
+
+        Base:
+
+        If \(L = \{0\}\), then every \(w \in V\) satisfies the conclusion.
+        Since \(V\) is non-zero, such a \(w\) exists.
+
+        Induction:
+
+        Assume the claim hold for any finite dimensional Lie algebra \(P\) and any nilpotent representation \(\phi: P \rightarrow \operatorname{Lin}{(W)}\) with \(\dim{(P)} < n\).
+        Suppose \(L\) is a Lie algebra with \(\dim{(L)} = n\) and \(\rho: L \rightarrow \operatorname{Lin}{(V)}\).
+        
+        If \(\ker{(\rho)} \neq \{0\}\) then \(\dim{\left(L/\ker{(\rho)}\right)} < n\) and \(\rho\) gives a representation \(\rho : L/\ker{(\rho)} \rightarrow \operatorname{Lin}{(V)}\)
+        so by the induction hypothesis, there exists \(w \neq 0 \in V\) such that \(\rho(x)(w) = \rho(x + \ker{(\rho)})(w) = 0\) for all \(x \in L\).
+
+        If \(\ker{(\rho)} = \{0\}\), by the first isomorphism theorem, \(L \cong \rho(L)\) which is a subalgebra of \(\operatorname{Lin}{(V)}\).
+        So \(L\) is a Lie subalgebra of \(\operatorname{Lin}{(V)}\) with Lie bracket inherited from \(\rho(L)\).
+
+        Since \(\dim{(L)}\) is finite, choose \(L_0\) such that it is a proper Lie subalgebra of \(L\) with the maximum dimension.
+        \(L_0\) is the maximal proper Lie subalgebra of \(L\).
+        Since \(L\) is Lie subalgebra, \([L_0, L_0] \leq L_0\), thus there is a nilpotent representation \(\phi:L_0 \rightarrow \operatorname{Lin}{(L/L_0)}\)\
+        defined by \(\phi(x)(z + L_0) \coloneqq [x, z] + L_0\) where \(L/L_0\) is only the quotient vector space.
+
+        CHECK THAT THIS IS INDEED A REPRESENTATION.
+
+        By the induction hypothesis, there exists \(z_0 + L_0 \neq \{0\} \in L/L_0\) such that \([x, z_0] \in L_0\) for all \(x \in L_0\).
+        In particular, the subspace \(\operatorname{span}{\left\{L_0 \cup \{z_0\}\right\}}\) is a Lie subalgebra of \(L\).
+        Since \(z_0 \neq L_0\) and \(L_0\) was chosen to be a maximal proper Lie subalgebra, \(\operatorname{span}{\left\{L_0 \cup \{z_0\}\right\}} = L\).
+
+        Apply the induction hypothesis to \(L_0\) with nilpotent representation \(\rho:L \rightarrow \operatorname{Lin}{(V)}\).
+        The restriction of \(\rho\) to \(L_0\) is still a nilpotent representation.
+
+        Consider the space \(V_0 = \left\{ w \in V \mid X(w) = 0 \text{ for all } x \in L_0\right\}\).
+        The space is non-zero.
+        Let \(w \in V_0\).
+        Then for all \(x \in L_0\), \(xz_0(w) = z_0x(w) + [x, z_0](w) = 0\) which implies that \(z_0(V_0): V_0 \rightarrow V_0 \subseteq V_0\) is nilpotent.
+        Since \(z_0\) is nilpotent, it is not injective (it has a non-zero kernel), so there exists \(0 \neq w_0 \in V_0\) such that \(z_0 (w_0) = 0\).
+        SO \(w_0\) gets vanished in \(L_0\) and it got vanished by \(z_0\).
+        So \(X(w_0) = 0\) for all \(x \in \operatorname{span}{\{L_0 \cup \{z_0\}\}} = L\).
+
+        NOT DONE
+
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    There is no two dimensional complex simple Lie algebra.
+    \begin{proof}
+        Let \(L\) be a two dimensional Lie algebra with basis \(\{x, y\}\).
+        Then consider \([x, y] = ax + by\) for some \(a, b \in \mathbb{C}\).
+        \begin{itemize}
+            \item If \(a = b = 0\), then \([x, y] = 0\) which would mean \(L\) is abelian, and hence not simple.
+            \item If \(a = 0\) and \(b \neq 0\), then the ideal \(I = \left\{ky : k \in \mathbb{C}\right\}\) is proper ideal of \(L\), hence not simple.
+            \item Suppose \(a, b \neq 0\).
+            Then \(\left[x, \frac{1}{a} y \right] = x + \frac{b}{a}y\).
+            Let \(z = x + \frac{b}{a}y\).
+            By bilinearity of the Lie bracket,
+            \(z = \left[z - \frac{b}{a}y, \frac{1}{a} y \right] = \left[z, \frac{1}{a} y \right] - \left[\frac{b}{a}y, \frac{1}{a} y \right] = \left[z, \frac{1}{a} y \right]\).
+            So \(I = \left\{kz : k \in \mathbb{C} \right\}\) is a proper ideal of \(L\), hence not simple.
+        \end{itemize}
+    \end{proof}
+\end{thmstyle}
+
+\begin{thmstyle}
+    If \(L\) is a finite dimensional complex semisimple Lie algebra,
+    then \(\operatorname{ad}:L\rightarrow \operatorname{Lin}{(L)}\) is injective.
+    So \(L\cong \operatorname{ad}{(L)} \leq \operatorname{Lin}{(L)}\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    For all \(\phi \in \mathcal{A}^\ast\), there exists a unique \(A_\phi \in \mathcal{A}\) such that \(\phi(x) = B(A_\phi, x)\) for all \(x \in \mathcal{A}\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    \(\operatorname{span}{\{\Delta\}} = \mathcal{A}^\ast\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    If \(\phi \in \Delta\) then \(-\phi \in \Delta\).
+\end{thmstyle}
+
+
+\begin{thmstyle}
+    Let \(\phi \in \Delta\), \(x \in L_\phi\), \(y \in L_{-\phi}\).
+    Then \([x, y] = B(x, y)A_\phi\).
+    So \([L_\phi, L_{-\phi}]\) is a \(1\)-dimensional subspace.
+\end{thmstyle}
+
+\begin{thmstyle}
+    Every \(L\) contains a copy of \(\mathfrak{sl}_2(\mathbb{C})\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    For every \(\phi \in \Delta\), \(\dim(L_\phi) = 1\).
+\end{thmstyle}
+\begin{thmstyle}
+    Evert \(L\) has a Cartan subalgebra \(\mathcal{A}\) and
+    \[L = \mathcal{A} \oplus_{\phi \in \Delta} L_\phi\]
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(\mathcal{A}_1, \mathcal{A}_2\) be two Cartan subalgebras of \(L\).
+    Then there exists a Lie algebra isomorphism \(\sigma : L \rightarrow L\) such that \(\sigma(\mathcal{A}_1) = \mathcal{A_2}\).
+\end{thmstyle}
+
+\begin{thmstyle}
+    Let \(L\) be a finite dimensional semisimple complex Lie algebra.
+    Then the restriction of the Killing form of \(L\) to \(\mathcal{A}\) is positive definite.
+
+    Define \(\langle \cdot, \cdot \rangle\) on \(\mathcal{A}^\ast\) be \(\langle \phi, \psi\rangle \coloneqq B(A_\phi, A_\psi)\).
+\end{thmstyle}
+
+
+\subsection{Examples}
+
+\paragraph{\(\mathfrak{sl}_3 (\mathbb{C})\)}
+\begin{quote}
+    \begin{itemize}
+        \item Consider \(\mathfrak{sl}_2 (\mathbb{C})\) with Cartan subalgebra
+        \(\mathcal{A} = \left\{\begin{bmatrix}
+        a & 0 \\
+        0 & -a
+        \end{bmatrix} : a \in \mathbb{C} \right\}\).
+
+        A basis for \(\mathcal{A}\) is 
+        \[\left\{A\right\} = \left\{\begin{bmatrix}
+            1 & 0 \\
+            0 & -1
+        \end{bmatrix}\right\} = \left\{E_{1, 1} - E_{2, 2}\right\}\]
+        So \(\dim{(\mathcal{A})} = \dim(\mathcal{A}^\ast) = 1\).
+        Every linear functional \(\phi \in \mathcal{A}^\ast\) is completely determined by what it does to the basis elements of \(\mathcal{A}\).
+        
+        A basis for \(\mathfrak{sl}_2(\mathbb{C})\) is 
+        \[\left\{A, E_{1, 2}, E_{2, 1}\right\}\]
+
+        Let \(X \in \mathfrak{sl}_2 (\mathbb{C})\).
+        Since \(X\) is a linear combination of the basis, check what \(\operatorname{ad}(A)\) does to each basis element of \(\mathfrak{sl}_3 (\mathbb{C})\).
+        Then,
+        \begin{align*}
+            [A, E_{1, 2}] &= 2E_{1, 2} \\
+            [A, E_{2, 1}] &= -2E_{2, 1} \\
+        \end{align*}
+
+        So the roots must be \(\phi_2 \left(\begin{bmatrix}
+            a & 0 \\
+            0 & -a
+            \end{bmatrix} \right) = 2a\) 
+        and \(\phi_{-2} \left(\begin{bmatrix}
+            a & 0 \\
+            0 & -a
+        \end{bmatrix} \right) = -2a\).
+
+        \item Consider \(\mathfrak{sl}_3 (\mathbb{C})\) with Cartan subalgebra
+        \(\mathcal{A} = \left\{\begin{bmatrix}
+        a & 0 & 0 \\
+        0 & -a + b & 0 \\
+        0 & 0 & -b
+        \end{bmatrix} : a, b \in \mathbb{C} \right\}\).
+
+        A basis for \(\mathcal{A}\) is 
+        \[\left\{A_1, A_2\right\} = \left\{ \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & -1 & 0 \\
+            0 & 0 & 0
+        \end{bmatrix},
+        \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & -1
+        \end{bmatrix}\right\}
+        = \left\{E_{1, 1} - E_{2, 2}, E_{2, 2} - E_{3, 3} \right\}\]
+
+        So \(\dim{(\mathcal{A})} = \dim(\mathcal{A}^\ast) = 2\).
+        Every linear functional \(\phi \in \mathcal{A}^\ast\) is completely determined by what it does to the basis elements of \(\mathcal{A}\).
+
+        A basis for \(\mathfrak{sl}_3(\mathbb{C})\) is 
+        \[\left\{A_1, A_2, E_{1, 2}, E_{1, 3}, E_{2, 1}, E_{2, 3}, E_{3, 1}, E_{3, 2}\right\}\]
+        
+        Let \(X \in \mathfrak{sl}_3 (\mathbb{C})\).
+        Since \(X\) is a linear combination of the basis, check what \(\operatorname{ad}(A_1)\) and \(\operatorname{ad}(A_2)\) does to each basis element of \(\mathfrak{sl}_3 (\mathbb{C})\).
+        Then,
+        \begin{align*}
+            [A_1, E_{1, 2}] &=  2E_{1, 2} & [A_2, E_{1, 2}] &=  -E_{1, 2}\\
+            [A_1, E_{1, 3}] &=   E_{1, 3} & [A_2, E_{1, 3}] &=   E_{1, 3}\\
+            [A_1, E_{2, 1}] &= -2E_{2, 1} & [A_2, E_{2, 1}] &=   E_{2, 1}\\
+            [A_1, E_{2, 3}] &=  -E_{2, 3} & [A_2, E_{2, 3}] &=  2E_{2, 3}\\
+            [A_1, E_{3, 1}] &=  -E_{3, 1} & [A_2, E_{3, 1}] &=  -E_{3, 1}\\
+            [A_1, E_{3, 2}] &=   E_{3, 2} & [A_2, E_{3, 2}] &= -2E_{3, 2}\\
+        \end{align*}
+
+        For all linear functionals \(\phi \in \mathcal{A}^\ast\), define them by what they do to each basis element of \(\mathcal{A}\).
+        Denote \(\phi_{\alpha, \beta} (A_1) = \alpha\) and \(\phi_{\alpha, \beta} (A_2) = \beta\).
+        
+        Since roots are defined by \([A, X] = \phi(A)X\), match the pairs of \(E\) together to get the roots
+        \[\Delta = \left\{\phi_{2, -1}, \phi_{1, 1}, \phi_{-2, 1}, \phi_{-1, 2}, \phi_{-1, -1}, \phi_{1, -2}\right\} \]
+
+        Observe that \(\Delta\) spans \(\mathcal{A}^\ast\), but it is NOT a basis since some of the functionals are linear combinations of the other.
+        \begin{align*}
+            \phi_{-1, 2} &= - \phi_{2,1} + \phi_{1, 1} \\
+            \phi_{1, 1} &= - \phi_{-2, 1} + \phi_{-1, 2}
+        \end{align*}
+    \end{itemize}
+\end{quote}
+
+\paragraph{root system}
+\begin{quote}
+    \begin{itemize}
+        \item Lie algebras are reduced root systems.
+        \item Rank \(1\) Lie algebras.
+        If \(\lvert \Delta \rvert = 2\), then \(\Delta = \{w, -w\}\).
+        So there is a unique semisimple Lie algebra with rank \(1\).
+        \item Rank \(2\) Lie algebras.
+    \end{itemize}
+\end{quote}
+
+
+\end{document}
