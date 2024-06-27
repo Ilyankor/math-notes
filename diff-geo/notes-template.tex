@@ -1,0 +1,60 @@
+\documentclass[letterpaper, 10pt]{article}
+
+% math packages
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% text packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\renewcommand{\familydefault}{\sfdefault}
+
+% style commands
+\usepackage[margin=1.25in]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor=blue,
+}
+\usepackage{tocloft}
+\setlength\cftbeforesubsecskip{10pt}
+\usepackage{titlesec}
+\titleformat*{\subsubsection}{\large\sffamily}
+
+
+% theorem style
+\newenvironment{myquote}%
+    {\list{}{\leftmargin=0.3in \rightmargin=0pt}\item[]}%
+    {\endlist}
+
+\newtheoremstyle{theostyle}%
+    {}%
+    {}%
+    {\upshape}%
+    {}%
+    {\bfseries}%
+    {}%
+    {\newline}%
+    {}%
+
+\theoremstyle{theostyle}
+\newtheorem{theorem}{Theorem}[section]
+\newenvironment{thmstyle}[1][]{% 
+    \begin{theorem}[#1]\leavevmode\vspace{-\baselineskip}\myquote%
+    }{\endmyquote\end{theorem}}
+
+% title information
+\title{Course Name}
+\author{University of Houston, Sem XXXX}
+\date{MATH XXXX (Dr. Professor)}
+
+\begin{document}
+
+\maketitle
+\rule{0.9\textwidth}{0.5pt}
+
+\tableofcontents
+\newpage
+
+\end{document}
